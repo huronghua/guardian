@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head th:fragment="htmlhead">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="renderer" content="webkit" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>权限后台管理系统</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css-v=3.3.5.css}" />
+    <link rel="stylesheet" th:href="@{/css/font-awesome.min.css-v=4.4.0.css}"  />
+    <link rel="stylesheet" th:href="@{/css/animate.min.css}"   />
+    <link rel="stylesheet" th:href="@{/css/style.min.css-v=4.0.0.css}"  />
+    <link rel="stylesheet" th:href="@{/css/bootstrap-treeview.css}"  />
+    <link rel="stylesheet" th:href="@{/css/bootstrap-table.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/layer.css}" />
+    <link rel="stylesheet" th:href="@{/css/iconfont.css}" />
+    <link rel="stylesheet" th:href="@{/css/tree.css}" />
+    <link rel="stylesheet" th:href="@{/css/search.css}" />
+    <link rel="stylesheet" th:href="@{/css/multiple-select.css}" />
+    <link rel="stylesheet" th:href="@{/css/zTreeStyle/zTreeStyle.css}" />
+</head>
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+   <div id="wrapper">
+       <div th:replace="fragments/left :: left">left</div>
+       <div th:replace="fragments/top :: top">Top</div>
+       <div layout:fragment="content" id="content"></div>
+   </div>
+</body>
+<script th:src="@{/js/popper.js}"></script>
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/jquery.min.js-v=2.1.4.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}" ></script>
+<script th:src="@{/js/bootstrap.min.js-v=3.3.5.js}" ></script>
+<script th:src="@{/js/bootstrap-multiselect.js}" ></script>
+<script th:src="@{/js/bootstrap-datetimepicker.min.js}" ></script>
+<script th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}" ></script>
+<script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/plugins/layer/layer.min.js}" ></script>
+<script th:src="@{/js/hplus.min.js-v=4.0.0.js}" ></script>
+<script th:src="@{/js/contabs.min.js}"></script>
+<script th:src="@{/js/plugins/pace/pace.min.js}"></script>
+<script th:inline="javascript">
+    $(function () {
+        $("#logout").click(function () {
+            if (confirm('您确定退出吗？')) {
+                $("#logoutform").submit();
+            }
+        });
+    });
+</script>
+</html>

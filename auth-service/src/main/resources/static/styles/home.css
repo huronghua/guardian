@@ -1,0 +1,86 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "PingFang SC";
+    list-style: none;
+}
+body{
+    background-image: url('/images/home.png');
+    background-position: center;
+    background-size: 1920px 1500px ;
+}
+h4{
+    font-size: 54px;
+    text-align: center;
+    color: #FFF;
+    margin-top: 10%;
+    font-weight: normal;
+}
+h5{
+    font-size: 42px;
+    text-align: center;
+    color: #FFF;
+    font-weight: normal;
+}
+.dis_box{
+    width: 50%;
+    margin: 0 auto;
+    overflow: hidden;
+    margin-top: 40px;
+}
+.dis_box li{
+    width: 20%;
+    float: left;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    border: 1px solid #FFF;
+    margin: 2% 6%;
+    color: #FFF;
+    cursor: pointer;
+}
+.dis_box li:hover{
+    background: #f7e81a;
+    color: #000;
+    border: 1px solid transparent;
+}
+.foot_box{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    color: rgba(255, 255, 255, 0.5);
+}
+.foot{
+    width: 20%;
+    height: 50px;
+    line-height: 50px;
+    border-top: #cba996;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    margin-left: -10%;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+}
+.header{
+    width: 100%;
+    height: 30px;
+}
+.header ul{
+    width: 200px;
+    height: 30px;
+    float: right;
+    margin-top: 20px;
+}
+.header ul li{
+    float: left;
+    color: rgba(255, 255, 255, 0.8);
+    padding: 3px;
+}
+.header ul li:nth-child(3){
+    cursor: pointer;
+}

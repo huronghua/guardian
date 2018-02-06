@@ -1,0 +1,22 @@
+server:
+  port: 8103
+  tomcat:
+    uri-encoding: UTF-8
+spring:
+  datasource:
+    url: jdbc:mysql://rdsry5ng8fus2v021v53.mysql.rds.aliyuncs.com:3306/banma?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&useSSL=true
+    username: banma
+    password: banma123
+  application:
+    name: authorization-server
+#mybatis配置
+mybatis:
+  typeAliasesPackage: com.banmatrip.guardian.domain
+  mapperLocations: classpath*:mapper/*/*.xml
+  configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration.call-setters-on-nulls: true
+
+#登录页
+sso:
+  index:
+    url: http://guardian.auth.bmtrip.com/home

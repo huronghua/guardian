@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.rolepermission.PermissionMapper">
+
+    <!--功能权限获取-->
+    <select id="selectFunctionPermissionByLoginAccount"
+            parameterType="com.banmatrip.guardian.vo.permission.QueryFunctionPermissionVo"
+            resultType="com.banmatrip.guardian.dto.response.permission.FunctionPermission">
+        SELECT
+        f.url AS url,
+        f.type AS functionType
+        FROM
+        sso_user u
+        JOIN sso_user_role ur ON u.id = ur.user_id and ur.delete_flag='N'
+        JOIN sso_role_function rf ON ur.role_id = rf.role_id
+        JOIN sso_function f ON rf.function_id = f.id
+        WHERE u.account = #{loginAccount}
+        <if test="functionType != null">
+            AND f.type = #{functionType}
+        </if>
+        GROUP BY f.url,f.type
+    </select>
+
+    <!--orange功能权限获取-->
+    <select id="selectOrangeFunctionPermissionByLoginAccount"
+            parameterType="com.banmatrip.guardian.vo.permission.QueryFunctionPermissionVo"
+            resultType="com.banmatrip.guardian.dto.response.permission.FunctionPermission">
+        SELECT
+        f.url AS url,
+        f.name AS `name`
+        FROM
+        sso_user u
+        JOIN sso_user_role ur ON u.id = ur.user_id and ur.delete_flag='N'
+        JOIN sso_role_function rf ON ur.role_id = rf.role_id
+        JOIN sso_function f ON rf.function_id = f.id
+        WHERE u.account = #{loginAccount}
+        <if test="functionType != null">
+            AND f.type = #{functionType}
+        </if>
+        GROUP BY f.url,f.type
+    </select>
+    <!--orange用戶权限组角色获取-->
+    <select id="selectOrangeRoleGroupByLoginAccount" parameterType="com.banmatrip.guardian.vo.permission.QueryFunctionPermissionVo"
+            resultType="java.util.Map">
+        SELECT
+            tt.orange_id as 'id',
+            t.`name`
+        FROM
+            (
+                SELECT
+                    c.id,
+                    c.`name`
+                FROM
+                    (
+                        SELECT
+                            id
+                        FROM
+                            sso_user
+                        WHERE
+                            account = #{loginAccount}
+                    ) a
+                JOIN (SELECT * FROM sso_user_role WHERE delete_flag='N') b ON a.id = b.user_id
+                JOIN sso_role c ON b.role_id = c.id
+                GROUP BY
+                    c.id,
+                    c.`name`
+            ) t
+        LEFT JOIN sso_contrast_role tt ON t.id = tt.guardian_id
+    </select>
+
+    <!--数据权限获取-->
+    <!--    <select id="selectDataRangePermissionByLoginAccount" parameterType="java.lang.String"
+                resultType="com.banmatrip.guardian.dto.response.permission.DataRangeTypeAndId">
+               SELECT
+                    c.data_range_type AS dataRangeType,
+                    c.data_range_id   AS dataRangeId
+                FROM
+                 sso_user a
+              JOIN sso_user_role b       ON a.id = b.user_id
+              JOIN sso_role_data_range c ON b.role_id = c.role_id
+              WHERE a.account = #{loginAccount}
+              GROUP BY c.data_range_type,c.data_range_id
+        </select>-->
+
+    <!--跟人相关-->
+    <select id="selectDataRangePermissionByLoginAccountAndUsr"
+            resultType="com.banmatrip.guardian.dto.response.permission.DataRangeTypeAndId">
+        SELECT
+        b.data_range_type AS dataRangeType,
+        b.data_range_id   AS dataRangeId
+        FROM
+        sso_user a
+        JOIN sso_user_data_range b ON a.id = b.user_id
+        WHERE a.account = #{loginAccount}
+        GROUP BY b.data_range_type,b.data_range_id
+    </select>
+
+    <!--跟部门相关或跟部门及下属部门相关-->
+    <select id="selectDataRangePermissionByLoginAccountAndDep"
+            resultType="com.banmatrip.guardian.dto.response.permission.DataRangeTypeAndId">
+        select
+        data_range_type AS dataRangeType,
+        data_range_id AS dataRangeId
+        from sso_department_data_range WHERE delete_flag =0 AND department_id in
+        <foreach collection="departmentIdList" item="departmentId" separator="," open="(" close=")">
+            #{departmentId}
+        </foreach>
+    </select>
+
+
+    <!--根据登录账号查询数据范围类型信息-->
+    <select id="selectDataRangeTypeByLoginAccount" parameterType="java.lang.String"
+            resultType="com.banmatrip.guardian.dto.response.permission.DataRangePermisssion">
+        SELECT
+            c.destination_type AS destinationType,
+            c.platform_type    AS platformType,
+            c.product_type     AS productType,
+            c.resource_type    AS resourceType
+        FROM
+            sso_user a
+        JOIN sso_user_role b  ON a.id = b.user_id and b.delete_flag='N'
+        JOIN sso_role c       ON b.role_id = c.id
+        WHERE a.account = #{loginAccount}
+        GROUP BY  c.destination_type,
+                   c.platform_type,
+                   c.product_type,
+                   c.resource_type
+    </select>
+</mapper>

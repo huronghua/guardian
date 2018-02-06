@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>成员信息编辑</title>
+    <link rel="stylesheet" th:href="@{/css/iconfont.css}"/>
+    <link rel="stylesheet" href="/css/info-edit.css"/>
+    <link rel="shortcut icon" href="favicon.ico" tppabs="http://www.zi-han.net/theme/hplus/favicon.ico"/>
+    <link href="/css/bootstrap.min.css-v=3.3.5.css" tppabs="http://www.zi-han.net/theme/hplus/css/bootstrap.min.css?v=3.3.5" rel="stylesheet"/>
+    <link href="/css/font-awesome.min.css-v=4.4.0.css" tppabs="http://www.zi-han.net/theme/hplus/css/font-awesome.min.css?v=4.4.0" rel="stylesheet"/>
+    <link href="/css/animate.min.css" tppabs="http://www.zi-han.net/theme/hplus/css/animate.min.css" rel="stylesheet"/><link href="/css/style.min.css-v=4.0.0.css" tppabs="http://www.zi-han.net/theme/hplus/css/style.min.css?v=4.0.0" rel="stylesheet"/><base target="_blank"/>
+    <link href="/css/multiple-select.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/css/bootstrap-multiselect.css" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="/css/zTreeStyle1/zTreeStyle.css" />
+    <link type="text/css" rel="stylesheet" href="/css/layer.css" />
+    <link rel="stylesheet" th:href="@{/css/search.css}" />
+</head>
+<body id="infoEditBody">
+<div class="ibox-content" id="edit-member" style="margin-right: -125px;">
+        <form target="_parent" id="info-edit" class="form-horizontal m-t-md" th:action="@{/user/infoEditSave}" method="post">
+            <input type="hidden" id="departmentList" name="departmentList"/>
+            <input  id="departmentGroup" name="departmentGroup" type="hidden" class="chec" th:value="${user.departmentId}"/>
+            <input  id="userNameList" name="userNameList" type="hidden" class="chec" th:value="${userNameList}"/>
+            <input  id="depWithEcho" name="depWithEcho" type="hidden" class="chec" th:value="${depWithEcho}"/>
+            <input  id="departmentId" name="departmentId" type="hidden" class="chec" th:value="${departmentId}"/>
+            <input  escapeJavaScript="false" escape="false" id="userployeeIdList" name="userployeeIdList" type="hidden" class="chec" th:value="${userployeeIdList}"/>
+            <input  escapeJavaScript="false" escape="false" id="userEmailList" name="userEmailList" type="hidden" class="chec" th:value="${userEmailList}"/>
+            <input  escapeJavaScript="false" escape="false" id="userOrangeAcc" name="userOrangeAcc" type="hidden" class="chec" th:value="${userOrangeAcc}"/>
+            <input  escapeJavaScript="false" escape="false" id="userNameCheck" name="userNameCheck" type="hidden" class="chec" th:value="${userNameCheck}"/>
+            <input type="hidden" name="deptId" id="deptId" th:value="${depId}" />
+            <input type="hidden" name="origin" id="origin" th:value="${origin}" />
+            <div class="form-group">
+                <label class="col-sm-2 col-sm-2 control-label">姓名*</label>
+                <div class="col-sm-10">
+                    <input id="name" name="name" type="text" class="form-control required" maxlength="30" th:value="${user.name}" style="width: 34%"/>
+                    <input id="userId" name="userId" type="hidden" th:value="${userId}"/>
+                    <label class="col-sm-2 control-label" style="position: absolute;margin-left: 217px;margin-top: -56px;">工号</label>
+                    <input id="employeeId" name="employeeId" type="text" class="form-control" maxlength="30" th:value="${user.employeeId}" style="width: 34%;position: absolute;margin-left: 232px;margin-top: -35px;"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">企业邮箱*</label>
+                <div class="col-sm-10">
+                    <input id="email" name="email" type="text" class="form-control required" maxlength="30" th:value="${user.email}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">手机号码</label>
+                <div class="col-sm-10">
+                    <input id="userCellphone" name="userCellphone" type="text" class="form-control"  maxlength="11" th:value="${user.cellphone}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">系统登录账号*</label>
+                <div class="col-sm-10">
+                    <input id="orangeAccount" name="orangeAccount" type="text" class="form-control required" maxlength="30" th:value="${user.account}"/>
+                </div>
+            </div>
+            <div class="form-group" th:if="${diffRole} != 1">
+                <label class="col-sm-2 control-label">分配角色</label>
+                <div class="col-sm-10" >
+                    <select id="roleList" class="roleList" multiple="true" >
+                        <option th:each="rt :${roleList}" th:value="${rt.id}" th:selected="${#lists.contains(roleListNow,rt.id)}">
+                            <span th:text="${rt.name}">角色</span>
+                        </option>
+                    </select>
+                    <input type="hidden" name="roleList" class="roleListBack" value=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">岗位*</label>
+                <div class="col-sm-11" >
+                    <select name="position" id="position" class="required" maxlength="30">
+                        <option th:each="role:${role}" th:text="${role.name}" th:value="${role.code}" th:selected="${role.isTrue}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" >
+                <label class="col-sm-2 control-label">所在部门*</label>
+                <div class="col-sm-10 depart con-height" id="depart" style="width: 72.5%;">
+                    <p id="depTree" style="width:430px;height:25px;line-height:30px;overflow:hidden;display:block;position: relative;left: -6px;top: 3px;">部门</p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">族群</label>
+                <div class="col-sm-10 con-height">
+                    <select class="required" name="ethnic"  id="ethnic" multiple="true">
+                        <option th:each="ethnic:${ethnic}" th:text="${ethnic.name}" th:value="${ethnic.code}" th:selected="${ethnic.isTrue}">
+                        </option>
+                    </select>
+                    <input type="hidden" id="ethnicList" name="ethnicList"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">序列</label>
+                <div class="col-sm-10 con-height">
+                    <select class="required" name="roleType"  id="roleType" multiple="true">
+                        <option th:each="roleType:${roleType}" th:text="${roleType.name}" th:value="${roleType.code}" th:selected="${roleType.isTrue}">
+                        </option>
+                    </select>
+                    <input type="hidden" id="roleTypeList" name="roleTypeList"/>
+                </div>
+            </div>
+            <div class="hr-line-dashed"></div>
+            <div class="form-group" id="des">
+                <label class="col-sm-2 control-label">目的地</label>
+                <div class="col-sm-10 con-height" >
+                    <select name="destination" multiple="true" id="destination">
+                        <option th:each="destination,destinationStat:${destination}" th:value="${destination.id}" th:text="${destination.name}" th:selected="${destination.isTrue}"></option>
+                    </select>
+                    <input type="hidden" id="destinationList" name="destinationList"/>
+                </div>
+            </div>
+            <div class="form-group" id="pla">
+                <label class="col-sm-2 control-label">渠道</label>
+                <div class="col-sm-10 con-height" >
+                    <select name="platform" multiple="multiple" id="platform">
+                        <optgroup th:each="platform:${platform}" th:label="${platform.name}" >
+                            <option th:each="children:${platform.get('children')}" th:text="${children.name} ? ${children.name} : ''" th:value="${children.id} ? ${children.id} : ''" th:selected="${children.isTrue}"></option>
+                        </optgroup>
+                    </select>
+                    <input type="hidden" id="platformList" name="platformList"/>
+                </div>
+            </div>
+            <div class="form-group" id="pro">
+                <label class="col-sm-2 control-label">产品类型</label>
+                <div class="col-sm-10 con-height" >
+                    <select   name="productType" id="productType" multiple="true">
+                        <option th:each="productType,productTypeStat:${productType}" th:value="${productType.id}" th:text="${productType.name}" th:selected="${productType.isTrue}"></option>
+                    </select>
+                    <input type="hidden" id="productTypeList" name="productTypeList"/>
+                </div>
+            </div>
+            <div class="form-group" id="res">
+                <label class="col-sm-2 control-label">资源类型</label>
+                <div class="col-sm-10 con-height" >
+                    <select class="required" name="resourceType" multiple="true" id="resourceType">
+                        <option th:each="resourceType,destinationStat:${resourceType}" th:value="${resourceType.id}" th:text="${resourceType.name}" th:selected="${resourceType.isTrue}"></option>
+                    </select>
+                    <input type="hidden" id="resourceTypeList" name="resourceTypeList"/>
+                </div>
+            </div>
+            <div class="form-group" style="text-align: center;">
+                <button id="submit_button" type="submit"  class="btn-color btn" style="margin-left: -110px;margin-right: 25px;">保存</button>
+                <button id="cancel_button" type="button"  class="btn-color btn" onclick="cancel_edit()" style="position: relative;left: -14px;">取消</button>
+            </div>
+            <div class="form-group Alert" id="Alert">
+                <div style="overflow: auto;height: 372px">
+                    <ul id="cityTree" class="ztree ztree2"></ul>
+                    <div class="confir_cancle">
+                        <span class="confir" id="confir">确认</span>
+                        <span class="cancle" id="cancle">取消</span>
+                    </div>
+                </div>
+            </div>
+    </form>
+</div>
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script th:src="@{/js/bootstrap-multiselect.js}"></script>
+<script src="/js/info-edit.js"></script>
+<script type="text/javascript" src="/js/layer.js"></script>
+<script src="/js/multiple-select.js"></script>
+<script src="/js/select.js"></script>
+<script type="text/javascript" src="/js/popper.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/departselect.js"></script>
+<script type="text/javascript" src="/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="/js/jquery.validate.js"></script>
+<script language="javascript" type="text/javascript" src="/js/jquery.ztree.core.js"></script>
+<script language="javascript" type="text/javascript" src="/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="/js/department-tree-mem.js"></script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.login.LoginLogMapper" >
+
+    <!--插入登录日志-->
+    <insert id="insertLoginLog" parameterType="com.banmatrip.guardian.domain.LoginLog">
+        insert into sso_login_log
+        (
+          id,
+          login_account,
+          login_name,
+          login_time,
+          signout_time,
+          login_ip,
+          login_mac
+        ) VALUES
+        (
+          #{id},
+          #{loginAccount},
+          #{loginName},
+          #{loginTime},
+          #{signoutTime},
+          #{loginIp},
+          #{loginMac}
+        )
+    </insert>
+
+    <!--更新登录日志-->
+    <update id="updateLoginLog" parameterType="com.banmatrip.guardian.domain.LoginLog">
+        update sso_login_log
+          <set>
+            <if test="loginTime != null">
+                login_time = #{loginTime},
+            </if>
+            <if test="signoutTime != null">
+                signout_time = #{signoutTime},
+            </if>
+            <if test="loginIp != null">
+                login_ip = #{loginIp},
+            </if>
+            <if test="loginMac != null">
+                login_mac = #{loginMac},
+            </if>
+          </set>
+        where id = #{id}
+    </update>
+
+    <!--根据用户账号查询用户信息-->
+    <select id="selectUserByAccount" parameterType="java.lang.String" resultType="com.banmatrip.guardian.vo.login.UserVo">
+          select
+             t.id             AS id,
+             t.account        AS account,
+             t.cellphone      AS cellphone,
+             t.`name`         AS `name`,
+             t.orange_account AS orangeAccount,
+             t.role_type      AS roleType
+          from sso_user t
+            where t.account = #{account}
+    </select>
+
+    <!--根据账户查询最近登录记录-->
+    <select id="selectLatestLoginLogByAccount" parameterType="java.lang.String" resultType="com.banmatrip.guardian.domain.LoginLog">
+        select
+          id            AS id,
+          login_account AS loginAccount,
+          login_name    AS loginName,
+          login_time    AS loginTime,
+          signout_time  AS signoutTime,
+          login_ip      AS loginIp,
+          login_mac     AS loginMac
+        from sso_login_log t
+        order by t.login_time desc limit 1
+    </select>
+
+    <!--查询系统配置信息-->
+    <select id="selectSystemConfigList" resultType="com.banmatrip.guardian.vo.login.SystemConfigVo">
+        SELECT
+        id,
+       `name`,
+        url,
+        sort
+      FROM
+        sso_system_config
+        order by sort
+    </select>
+
+</mapper>

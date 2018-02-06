@@ -1,0 +1,10 @@
+server:
+  port: 8093
+
+zuul:
+  routes:
+    resource:
+      path: /resource/**
+      url: http://localhost:8083
+      stripPrefix: true
+      retryable:

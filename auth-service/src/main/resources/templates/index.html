@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<script type="text/javascript" th:inline="javascript">
+    var href =/*[[${ssoIndexUrl}]]*/;
+    function new_window(){
+        location.href = href;
+    }
+</script>
+
+<!-- onload="new_window()"-->
+<body onload="new_window()">
+......请稍候
+</body>
+</html>

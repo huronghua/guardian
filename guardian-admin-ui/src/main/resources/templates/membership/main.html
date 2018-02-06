@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head th:include="layout :: htmlhead"></head>
+<style>
+    .node_active {
+        color: #fff!important;
+        background: #f95d5d;
+        opacity: 0.8;
+    }
+    .ztree li a {
+        line-height: 30px;
+    }
+    .ztree li a.curSelectedNode {
+        line-height: 30px;
+    }
+    .ztree li span.button.ico_close {
+        margin-top: 7px;
+    }
+    .ztree li span.button.ico_open {
+        margin-top: 7px;
+    }
+    a.glyphicon {
+        font-family: 'Glyphicons Halflings'!important;
+    }
+
+    div.tit {
+        width: 1230px;
+    }
+
+    ul.ztree li a.curSelectedNode {
+        opacity: inherit;
+    }
+
+    div.menu_box {
+        width: 290px;
+        overflow: unset;
+    }
+
+    ul
+</style>
+<body style="overflow: scroll;">
+<form name="form3" class="form3" id="form3" method="post">
+    <div class="con">
+        <div class="tit">
+            <div class="fl tit_l">
+                <i class="iconfont fl icon-quanxianguanli"></i>
+                <span class="fl">成员架构管理</span>
+            </div>
+            <div class="fr tit_r" style="left: -690px; top: 5px;">
+                <input type="text" class="search_txt fl" id="userName" placeholder="输入人名搜索..." autocomplete="off" onkeydown="if(event.keyCode==13){return false;}" style="width: 240px;"/>
+                <i class="iconfont fl icon-sousuo" id="queryUser" style="margin-top: -3px"></i>
+                <div style="z-index: 100;position: absolute;">
+                    <ul class="selec" id="selec" style="margin-top: 70px;margin-left: 0px;width: 240px;"></ul>
+                </div>
+            </div>
+            <div class="top-right-title">
+                <span class="fl font-notUnderLine font-underLine index-member">成员信息</span>
+                <span class="fl font-notUnderLine disableQuery">已禁用账户</span>
+            </div>
+        </div>
+        <!-- 联动菜单 -->
+        <div class="bot">
+            <div id="box" class="menu_box fl">
+                <div class="zTreeDemoBackground left">
+                    <ul id="treeDemo" class="ztree"></ul>
+                </div>
+                <!-- 联动改变的内容 -->
+                <input type="hidden" name="departmentId" id="departmentId" value="" th:value="${departmentId}"/>
+                <input type="hidden" id="success" th:value="${success}"/>
+                <input type="hidden" id="fail" th:value="${fail}"/>
+                <input type="hidden" name="memberEdit" th:value="${accountemployeeedit}" />
+                <input type="hidden" class="deptEditRole" th:value="${accountdepartmentset}" placeholder="部门设置权限"/>
+                <input type="hidden" class="deptAddRole" th:value="${accountsubdepartmentadd}" placeholder="部门添加权限"/>
+                <input type="hidden" class="batchEditRole" th:value="${accountfunctionbatchmanagement}" placeholder="批量修改权限"/>
+                <input type="hidden" class="passwordReset" th:value="${accountfunctionpasswordreset}" placeholder="密码重置权限"/>
+            </div>
+            <div class="col-sm-9">
+                <div class="dis_con_tit">
+                    <div class="col-lg-10" style="width: 76%;">
+                        <div class="dis_con_tit_l fl" id="department_title" th:text="${departmentName}"></div>
+                        <input type="hidden" class="department_title_tmp" value=""/>
+                    </div>
+                    <div class="col-lg-2" style="width: 23.6666666%;">
+                        <a th:if="${accountdepartmentemployeeadd}" title="添加部门员工"  class="glyphicon glyphicon-user" style="font-size: 20px;cursor: pointer;color: #f96868;" aria-hidden="true"></a>
+                        &nbsp;&nbsp;
+                        <a th:if="${accountemployeebatchimport}" title="批量导入"  class="glyphicon glyphicon-download-alt" style="font-size: 20px;cursor: pointer;color: #f96868;" aria-hidden="true"></a>
+                    </div>
+                </div>
+                <div class="line" style="width: 924px;border-bottom: 1px solid #000;"></div>
+                <div class="role_box">
+                    <table class="role_table" id="data_table">
+                    </table>
+                </div>
+            </div><br/>
+            <div class="batchOption" style="float: right; margin-top: 60px;margin-right: 70px;font-size: medium;">
+                <a class="editSome" style="color: #f95d5d">批量操作</a>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="list" id="list" th:value="${list}"/>
+    <script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script th:src="@{/js/popper.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js-v=3.3.5.js}"></script>
+    <script th:src="@{/js/jstree.min.js}"></script>
+    <script th:src="@{/js/layer.js}"></script>
+    <script th:src="@{/js/tree.js}"></script>
+    <script th:src="@{/js/tool.js}"></script>
+    <script type="text/javascript" src="../../../js/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="../../../js/jquery.ztree.excheck.js"></script>
+    <script type="text/javascript" src="../../../js/jquery.ztree.exhide.js"></script>
+    <script th:src="@{/js/member_main.js}"></script>
+</form>
+</body>
+</html>

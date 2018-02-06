@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head th:include="layout :: htmlhead"></head>
+<body style="height: 80%">
+<div class="showPage">
+    <a class="download-btn" href="/department/downloadTemplate.htm" style="font-size: initial;font-style: italic;">下载数据模板</a>
+    <form name="importForm" target="_parent"  id="importForm" method="post" action="/department/batchImportUser" enctype="multipart/form-data" >
+        <span style="position: absolute;margin-top: 24px;">文件上传：</span>
+        <input type="file" name="file" class="fileUpdate" style="padding-top: 20px;padding-left: 70px"/><br/><br/>
+        <span class="btn-color btn import" >导入</span>
+    </form>
+</div>
+<script type="text/javascript" th:src="@{/js/popper.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/department/personal.js}"></script>
+</body>
+</html>

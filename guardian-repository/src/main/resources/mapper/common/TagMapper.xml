@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.common.TagMapper" >
+  <resultMap id="BaseResultMap" type="com.banmatrip.guardian.domain.Tag" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="description" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="img_1" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="img_2" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="img_customize" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="group_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="delete_flag" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="update_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="show_place" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, description, img_1, img_2, img_customize, group_id, delete_flag, update_time, 
+    show_place
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tag
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllTag" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from tag
+    where delete_flag = 0 AND group_id = 2
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tag
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.banmatrip.guardian.domain.Tag" >
+    insert into tag (id, name, description, 
+      img_1, img_2, img_customize, 
+      group_id, delete_flag, update_time, 
+      show_place)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{img_1,jdbcType=VARCHAR}, #{img_2,jdbcType=VARCHAR}, #{img_customize,jdbcType=VARCHAR}, 
+      #{group_id,jdbcType=INTEGER}, #{delete_flag,jdbcType=TINYINT}, #{update_time,jdbcType=TIMESTAMP}, 
+      #{show_place,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.banmatrip.guardian.domain.Tag" >
+    insert into tag
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="img_1 != null" >
+        img_1,
+      </if>
+      <if test="img_2 != null" >
+        img_2,
+      </if>
+      <if test="img_customize != null" >
+        img_customize,
+      </if>
+      <if test="group_id != null" >
+        group_id,
+      </if>
+      <if test="delete_flag != null" >
+        delete_flag,
+      </if>
+      <if test="update_time != null" >
+        update_time,
+      </if>
+      <if test="show_place != null" >
+        show_place,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="img_1 != null" >
+        #{img_1,jdbcType=VARCHAR},
+      </if>
+      <if test="img_2 != null" >
+        #{img_2,jdbcType=VARCHAR},
+      </if>
+      <if test="img_customize != null" >
+        #{img_customize,jdbcType=VARCHAR},
+      </if>
+      <if test="group_id != null" >
+        #{group_id,jdbcType=INTEGER},
+      </if>
+      <if test="delete_flag != null" >
+        #{delete_flag,jdbcType=TINYINT},
+      </if>
+      <if test="update_time != null" >
+        #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="show_place != null" >
+        #{show_place,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.banmatrip.guardian.domain.Tag" >
+    update tag
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="img_1 != null" >
+        img_1 = #{img_1,jdbcType=VARCHAR},
+      </if>
+      <if test="img_2 != null" >
+        img_2 = #{img_2,jdbcType=VARCHAR},
+      </if>
+      <if test="img_customize != null" >
+        img_customize = #{img_customize,jdbcType=VARCHAR},
+      </if>
+      <if test="group_id != null" >
+        group_id = #{group_id,jdbcType=INTEGER},
+      </if>
+      <if test="delete_flag != null" >
+        delete_flag = #{delete_flag,jdbcType=TINYINT},
+      </if>
+      <if test="update_time != null" >
+        update_time = #{update_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="show_place != null" >
+        show_place = #{show_place,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.banmatrip.guardian.domain.Tag" >
+    update tag
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      img_1 = #{img_1,jdbcType=VARCHAR},
+      img_2 = #{img_2,jdbcType=VARCHAR},
+      img_customize = #{img_customize,jdbcType=VARCHAR},
+      group_id = #{group_id,jdbcType=INTEGER},
+      delete_flag = #{delete_flag,jdbcType=TINYINT},
+      update_time = #{update_time,jdbcType=TIMESTAMP},
+      show_place = #{show_place,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--根据组ID获取配置信息-->
+  <select id="getTagByGroupId" resultType="java.util.Map">
+    SELECT
+        *
+    FROM
+        tag
+    WHERE
+        `delete_flag` = 0
+    AND `group_id` = #{groupId}
+    ORDER BY
+        id DESC
+  </select>
+  <select id="selectByDestinationString" parameterType="java.util.List" resultType="java.lang.Integer">
+    SELECT `id`
+    FROM tag
+    WHERE `delete_flag` = 0 AND
+    `name` IN
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

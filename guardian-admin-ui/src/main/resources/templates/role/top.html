@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+
+<head th:include="layout :: htmlhead"></head>
+
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox float-e-margins">
+                <div class="col-lg-3">
+                    <span class="glyphicon glyphicon-user" style="font-size: 30px;" aria-hidden="true"></span>
+                    &nbsp;
+                    <span style="font-size: 30px;">角色权限管理</span>
+                </div>
+                <div class="col-lg-5">
+
+                </div>
+                <div class="col-lg-3">
+                    <input type="text" placeholder="输入姓名搜索" class="input form-control" />
+                </div>
+                <div class="col-lg-1">
+                    <button type="button" class="btn btn btn-primary"> <i class="fa fa-search"></i> 搜索</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-sm-3">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+
+                    <div id="json_tree"></div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs-right">
+            <ul class="nav nav-tabs">
+                <li class="active"><a data-toggle="tab" href="#tab-10">角色成员</a>
+                </li>
+                <li class=""><a data-toggle="tab" href="#tab-11"> 功能权限</a>
+                </li>
+                <li class=""><a data-toggle="tab" href="#tab-12"> 数据范围</a>
+                </li>
+            </ul>
+            <div class="tab-content ">
+                <div id="tab-10" class="tab-pane active">
+                    <div class="col-sm-9">
+                        <div class="col-lg-10">
+                            <h4 class="example-title">Boss</h4>
+                        </div>
+                        <div class="col-lg-2">
+                            <span class="glyphicon glyphicon-cog" style="font-size: 20px;" aria-hidden="true"></span>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-th-list" style="font-size: 20px;" aria-hidden="true"></span>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-user" style="font-size: 20px;" aria-hidden="true"></span>
+                            &nbsp;&nbsp;
+                            <span class="glyphicon glyphicon-download-alt" style="font-size: 20px;" aria-hidden="true"></span>
+                        </div>
+                        <div class="col-lg-12">
+                            <table class="table">
+                                <tr>
+                                    <td width="20%">姓名</td>
+                                    <td width="20%">职位</td>
+                                    <td width="20%">企业邮箱</td>
+                                    <td width="10%">工号</td>
+                                    <td width="20%">手机号</td>
+                                    <td width="10%">操作</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="tab-11" class="tab-pane">
+                    <div class="panel-body">
+                        <strong>栅格系统</strong>
+
+                        <p>Bootstrap 提供了一套响应式、移动设备优先的流式栅格系统，随着屏幕或视口（viewport）尺寸的增加，系统会自动分为最多12列。它包含了易于使用的预定义类，还有强大的mixin 用于生成更具语义的布局。</p>
+                    </div>
+                </div>
+                <div id="tab-12" class="tab-pane">
+                    <div class="panel-body">
+                        <strong>啦啦啦</strong>
+
+                        <p>啦啦啦啦啦</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/popper.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/jstree.min.js}"></script>
+<script>
+    $(document).ready(function () {
+        $("#json_tree").jstree({
+            "core": {
+                "data":getTreeData()
+            }
+        });
+
+        $('#json_tree').on('select_node.jstree', function (e, data) {
+
+            console.log(data.node.original.role_id);
+            var role_id = data.node.original.role_id;
+            if(typeof (role_id)!="undefined"){
+                $.ajax({
+                    type: "GET",
+                    url: 'jsontree',
+                    dataType: 'json',
+                    async:false,
+                    cache: false,
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        if (XMLHttpRequest.status == 401) {
+                            alert("登录信息失效，请刷新！");
+                        }
+                    },
+                    success: function (data) {
+                        treedata =  data;
+                    }
+                });
+            }
+
+        })
+    });
+
+    function getTreeData() {
+        var treedata;
+        $.ajax({
+            type: "GET",
+            url: 'jsontree',
+            dataType: 'json',
+            async:false,
+            cache: false,
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                if (XMLHttpRequest.status == 401) {
+                    alert("登录信息失效，请刷新！");
+                }
+            },
+            success: function (data) {
+                treedata =  data;
+            }
+        });
+        //console.log(treedata);
+        return treedata;
+    }
+
+</script>
+</body>
+
+</html>

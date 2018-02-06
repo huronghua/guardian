@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head th:include="layout :: htmlhead"></head>
+<body>
+<form name="form1" class="form1" id="form1" target="_parent" method="post">
+    <input type="hidden" name="departmentId" th:value="${departmentId}" />
+    <input id="depWithEcho" name="depWithEcho" type="hidden" class="chec" th:value="${depWithEcho}"/>
+    <input type="hidden" id="departmentList" name="departmentList"/>
+    <input type="hidden" name="parentId" id="parentId" th:value="${parentId}" readonly="readonly"/><br/>
+    <div>
+        <table class="department">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">部门名称*</label>
+                        <div class="col-sm-10" >
+                            <input type="text" name="departmentName" class="newDepartmentName input-border" autocomplete="off" id="departmentName" value="" placeholder="部门名称不能为空" style="width: 450px"/>
+                            <div class="error"><br/><span style="color:red">名称重复，请修改</span></div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 6px">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">上级部门*</label>
+                        <div class="col-sm-10" style="margin-top: -5px" >
+                            <ul id="cityTree" class="ztree ztree2"></ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="top: 4px;">部门主管*</label><br/>
+                        <input class="input-border" id="chargeMan" name="chargeName" autocomplete="off" value="" placeholder="请输入部门主管名称以进行搜索" style="margin-left: 15px;"/>
+                        <div style="z-index: 100;position: absolute;">
+                            <ul class="selec" id="selec" style="padding-top: 10px;"></ul>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">主管工号*</label>
+                        <div class="col-sm-10" >
+                            <input type="text" name="chargeShow" id="emplyeeShow" class="employeeShow input-border" value=""  readonly="readonly" style="width: 450px;background-color: #dbd7d7"/>
+                            <input type="hidden" name="charge" id="emplyee" class="employee input-border" value=""  readonly="readonly" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="padding-top: 3px;">部门分级*</label>
+                        <div class="col-sm-10" >
+                            <select id="departmentType" class="departmentType" style="width: 450px;border-radius: 4px; height: 34px;">
+                                <option th:each="product :${departmentType}" th:value="${product.code}">
+                                    <span th:text="${product.name}">部门分级</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="departmentType" class="departmentTypeBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">目的地</label>
+                        <div class="col-sm-10" >
+                            <select id="tag" class="tag" multiple="true" >
+                                <option th:each="tag :${tag}" th:value="${tag.id}">
+                                    <span th:text="${tag.name}">目的地</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="tag" class="tagBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="top: 1px">渠道</label>
+                        <div class="col-sm-10" >
+                            <select name="platform" multiple="multiple" id="platform" class="orderPlatform">
+                                <optgroup th:each="platform:${platform}" th:label="${platform.name}" >
+                                    <option th:each="children:${platform.get('children')}" th:text="${children.name} ? ${children.name} : ''" th:value="${children.id} ? ${children.id} : ''" th:selected="${children.isTrue}"></option>
+                                </optgroup>
+                            </select>
+                            <input type="hidden" name="orderPlatform" class="orderPlatformBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="top: 2px;">产品类型</label>
+                        <div class="col-sm-10" >
+                            <select id="productType" class="productType" multiple="true" >
+                                <option th:each="product :${productOrderTag}" th:value="${product.id}">
+                                    <span th:text="${product.name}">产品类型</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="productType" class="productTypeBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">资源类型</label>
+                        <div class="col-sm-10" >
+                            <select id="resourceType" class="resourceType" multiple="true" >
+                                <option th:each="rt :${resourceType}" th:value="${rt.id}">
+                                    <span th:text="${rt.name}">资源类型</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="resourceType" class="ressourceTypeBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center;padding-top: 20px">
+                    <input class="btn-color btn " type="button" id="saveToAdd" value="保存" />
+                    <input class="btn-color btn " type="button" id="cancel" value="取消" style="margin-left: 40px"/>
+                </td>
+            </tr>
+        </table>
+    </div><br/>
+</form>
+<script type="text/javascript" th:src="@{/js/popper.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-multiselect.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script type="text/javascript" th:src="@{/js/multiple-select.js}"></script>
+<script th:src="@{/js/department/department.js}"></script>
+<script th:src="@{/js/layer.js}"></script>
+<script th:src="@{/js/department-tree.js}"></script>
+<script th:src="@{/js/jquery.ztree.core.js}"></script>
+<script th:src="@{/js/jquery.ztree.excheck.js}"></script>
+<script th:src="@{/js/jquery.ztree.exhide.js}"></script>
+</body>
+</html>

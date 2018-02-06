@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="layout :: htmlhead"></head>
+<link rel="stylesheet" th:href="@{/css/function/bootstrap-theme.css}"  />
+<link rel="stylesheet" th:href="@{/css/function/bootstrap.min.css}"  />
+<body>
+<div class="con">
+    <div class="tit">
+        <div class="fl tit_l">
+            <i class="iconfont fl icon-quanxianguanli"></i>
+            <span class="fl">功能权限数据管理</span>
+        </div>
+        <div class="fr tit_r" style="left: -290px; top: 4px;">
+            <input type="text" class="search_txt fl" id="searchFunctionName" placeholder="输入权限名以搜索..." autocomplete="off" style="width: 240px;"/>
+            <i class="iconfont fl icon-sousuo" id="queryFunction" style="margin-top: -3px"></i>
+            <div style="z-index: 100;position: absolute;">
+                <ul class="selec" id="selec" style="margin-top: 70px; margin-left: 0px; width: 240px; display: none;"></ul>
+            </div>
+        </div>
+        <div class="fr tit_r">
+            <a th:if="${accountfunctionadd}"><i class="iconfont fl icon-tianjiafenzu" id="createFunction" title="新增功能权限" name="createFunction" style="color: #f96868;"></i></a>
+        </div>
+    </div>
+</div>
+<div>
+    <table class="table table-bordered" style="text-align: center">
+        <tr>
+            <td>
+                <h4>所属功能权限类别</h4>
+            </td>
+            <td>
+                <h4>用于鉴权的url</h4>
+            </td>
+            <td>
+                <h4>功能权限名称</h4>
+            </td>
+            <td>
+                <h4>操作</h4>
+            </td>
+        </tr>
+        <tr th:each="map:${function}">
+            <td id="td_function_id" th:hidden="true" th:value="${map.get('id')}"></td>
+            <td id="td_function_type" th:value="${map.get('type')}" th:text="${map.get('typeName')}"></td>
+            <td id="td_function_url"  th:value="${map.get('url')}" th:text="${(#strings.length(map.get('url'))>50) ? (#strings.append(#strings.substring(map.get('url'),0,40),'·····')): (map.get('url'))}" data-toggle="tooltip" data-placement="top" th:title="${map.get('url')}"></td>
+            <td id="td_function_name" th:value="${map.get('name')}" th:text="${map.get('name')}"></td>
+            <td>
+                <a th:if="${accountfunctionedit}" class="btn btn-danger btn-sm dropdown-toggle" th:value="${map.get('id')}" style="height: 30px" onclick="editFunction(this)" role="button">编辑</a>
+                <a th:if="${accountfunctiondelete}" class="btn btn-danger btn-sm dropdown-toggle" th:value="${map.get('id')}" style="height: 30px" id="function_del" onclick="deleteFunction(this);return false" role="button">删除</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="ibox-content" id="config_detail" hidden="true">
+    <form class="form-horizontal m-t" id="signupForm" th:action="@{/function/addFunction}" method="get" style="margin: 20px;">
+            <input type="hidden" id="function_id" name="function_id"/>
+            <div class="form-group">
+                <label for="function_type">权限分类(type):</label>
+                <br/>
+                <select name="function_type" style="width: 438px" required="required" class="btn btn-default dropdown-toggle" id="function_type">
+                    <option value="">请选择分类</option>
+                    <div th:each="type:${functionType}">
+                        <option th:value="${type.get('code')}" th:text="${type.get('name')}"></option>
+                    </div>
+
+                </select>
+
+            </div>
+            <div class="form-group">
+                <label for="function_url">匹配表达式(url):</label>
+                <input type="text" style="text-align:left" class="form-control" id="function_url" name="function_url" required="true"/>
+            </div>
+            <div class="form-group">
+                <label for="function_name">功能权限名称(name):</label>
+                <input type="text" style="text-align:left" class="form-control" id="function_name" name="function_name" required="true"/>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-sm-offset-3">
+                    <button id="save_button" class="btn btn-primary" type="submit" onclick="" style="float:left;background: #f95d5d;border-color: #f95d5d;width: 82px">确认</button>
+                    <span></span>
+                    <button id="cancel_button" class="btn btn-primary" type="reset" style="float:left;background: #f95d5d;border-color: #f95d5d;margin-left: 50px;width: 82px">取消</button>
+                </div>
+            </div>
+    </form>
+
+</div>
+</body>
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/popper.js}"></script>
+<script th:src="@{/js/function/bootstrap.min.js}"></script>
+<script th:src="@{/js/jstree.min.js}"></script>
+<script th:src="@{/js/layer.js}"></script>
+<script th:src="@{/js/function.js}"></script>
+</html>

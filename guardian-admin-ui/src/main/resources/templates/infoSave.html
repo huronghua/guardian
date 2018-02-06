@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>部门员工添加</title>
+    <link rel="stylesheet" th:href="@{/css/iconfont.css}"/>
+    <link rel="stylesheet" href="/css/info-edit.css"/>
+    <link rel="shortcut icon" href="favicon.ico" tppabs="http://www.zi-han.net/theme/hplus/favicon.ico"/>
+    <link href="/css/bootstrap.min.css-v=3.3.5.css" tppabs="http://www.zi-han.net/theme/hplus/css/bootstrap.min.css?v=3.3.5" rel="stylesheet"/>
+    <link href="/css/font-awesome.min.css-v=4.4.0.css" tppabs="http://www.zi-han.net/theme/hplus/css/font-awesome.min.css?v=4.4.0" rel="stylesheet"/>
+    <link href="/css/animate.min.css" tppabs="http://www.zi-han.net/theme/hplus/css/animate.min.css" rel="stylesheet"/><link href="/css/style.min.css-v=4.0.0.css" tppabs="http://www.zi-han.net/theme/hplus/css/style.min.css?v=4.0.0" rel="stylesheet"/><base target="_blank"/>
+    <link href="/css/multiple-select.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css"/>
+    <link rel="stylesheet" href="/css/bootstrap-multiselect.css" type="text/css"/>
+    <link type="text/css" rel="stylesheet" href="/css/zTreeStyle1/zTreeStyle.css" />
+    <link rel="stylesheet" th:href="@{/css/search.css}" />
+</head>
+<body>
+<div class="ibox-content" style="margin-right: -125px;">
+    <h3>
+        部门员工添加
+    </h3>
+    <form id="info-save" target="_parent" class="form-horizontal m-t-md" th:action="@{/user/infoSave}" method="post">
+        <input  id="depWithEcho" name="depWithEcho" type="hidden" class="chec" th:value="${depWithEcho}"/>
+        <input type="hidden" id="departmentList" name="departmentList"/>
+        <input  id="userNameList" name="userNameList" type="hidden" class="chec" th:value="${userNameList}"/>
+        <input  id="departmentId" name="departmentId" type="hidden" class="chec" th:value="${departmentId}"/>
+        <input  escapeJavaScript="false" escape="false" id="userployeeIdList" name="userployeeIdList" type="hidden" class="chec" th:value="${userployeeIdList}"/>
+        <input  escapeJavaScript="false" escape="false" id="userEmailList" name="userEmailList" type="hidden" class="chec" th:value="${userEmailList}"/>
+        <input  escapeJavaScript="false" escape="false" id="userOrangeAcc" name="userOrangeAcc" type="hidden" class="chec" th:value="${userOrangeAcc}"/>
+        <input  escapeJavaScript="false" escape="false" id="userNameCheck" name="userNameCheck" type="hidden" class="chec" th:value="${userNameCheck}"/>
+        <div class="form-group">
+            <label class="col-sm-2 col-sm-2 control-label">姓名*</label>
+            <div class="col-sm-10">
+                <input id="name" name="name" type="text" class="form-control required" maxlength="30" style="width: 34%"/>
+                <label class="col-sm-2 control-label" style="position: absolute;margin-left: 217px;margin-top: -56px;">工号</label>
+                <input id="employeeId" name="employeeId" type="text" class="form-control" maxlength="30" style="width: 34%;position: absolute;margin-left: 232px;margin-top: -35px;" th:placeholder="请输入斑马工号"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">企业邮箱*</label>
+            <div class="col-sm-10">
+                <input id="email" name="email" type="text" class="form-control" maxlength="30" th:placeholder="请输入企业邮箱"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">手机号码</label>
+            <div class="col-sm-10">
+                <input id="userCellphone" name="userCellphone" type="text" class="form-control"  maxlength="11" th:placeholder="请输入11位手机号"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">系统登录账号*</label>
+            <div class="col-sm-10">
+                <input id="orangeAccount" name="orangeAccount" type="text" class="form-control required" maxlength="30" th:placeholder="请输入系统登录账号"/>
+            </div>
+        </div>
+        <div class="form-group" th:if="${diffRole} != 1">
+            <label class="col-sm-2 control-label">分配角色</label>
+            <div class="col-sm-10" >
+                <select id="roleList" class="roleList" multiple="true" >
+                    <option th:each="rt :${roleList}" th:value="${rt.id}">
+                        <span th:text="${rt.name}">角色</span>
+                    </option>
+                </select>
+                <input type="hidden" name="roleList" class="roleListBack" value=""/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">职位*</label>
+            <div class="col-sm-10" >
+                <select name="position" id="position" class="required" maxlength="30">
+                    <option th:each="role:${role}" th:text="${role.name}" th:value="${role.code}" >
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group" >
+            <label class="col-sm-2 control-label">部门*</label>
+            <div class="col-sm-10 depart" id="depart" style="width: 72.5%;">
+                <p id="depTree" style="width:470px;height:25px;line-height:30px;overflow:hidden;display:block;position: relative;left: -6px;top: 3px;">部门</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">族群</label>
+            <div class="col-sm-10 con-height">
+                <select class="required" name="ethnic"  id="ethnic" multiple="true">
+                    <option th:each="ethnic:${ethnic}" th:text="${ethnic.name}" th:value="${ethnic.code}">
+                    </option>
+                </select>
+                <input type="hidden" id="ethnicList" name="ethnicList"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">序列</label>
+            <div class="col-sm-10">
+                <select name="roleType" id="roleType" class="{required:true, minlength:2}"  multiple="true">
+                    <option th:each="roleType:${roleType}" th:text="${roleType.name}" th:value="${roleType.code}" >
+                    </option>
+                </select>
+                <input type="hidden" id="roleTypeList" name="roleTypeList"/>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="form-group" id="des">
+            <label class="col-sm-2 control-label">目的地</label>
+            <div class="col-sm-10" >
+                <select name="destination" multiple="true" id="destination">
+                    <option th:each="destination,destinationStat:${destination}" th:value="${destination.id}" th:text="${destination.name}"></option>
+                </select>
+                <input type="hidden" id="destinationList" name="destinationList"/>
+            </div>
+        </div>
+        <div class="form-group" id="pla">
+            <label class="col-sm-2 control-label">渠道</label>
+            <div class="col-sm-10" >
+                <select name="platform" multiple="multiple" id="platform">
+                    <optgroup th:each="platform:${platform}" th:label="${platform.name}" >
+                        <option th:each="children:${platform.get('children')}" th:text="${children.name} ? ${children.name} : ''" th:value="${children.id} ? ${children.id} : ''"></option>
+                    </optgroup>
+                </select>
+                <input type="hidden" id="platformList" name="platformList"/>
+            </div>
+        </div>
+        <div class="form-group" id="pro">
+            <label class="col-sm-2 control-label">产品类型</label>
+            <div class="col-sm-10" >
+                <select   name="productType" id="productType" multiple="true">
+                    <option th:each="productType,productTypeStat:${productType}" th:value="${productType.id}" th:text="${productType.name}"></option>
+                </select>
+                <input type="hidden" id="productTypeList" name="productTypeList"/>
+            </div>
+        </div>
+        <div class="form-group" id="res">
+            <label class="col-sm-2 control-label">资源类型</label>
+            <div class="col-sm-10" >
+                <select name="resourceType" multiple="true" id="resourceType">
+                    <option th:each="resourceType,destinationStat:${resourceType}" th:value="${resourceType.id}" th:text="${resourceType.name}"></option>
+                </select>
+                <input type="hidden" id="resourceTypeList" name="resourceTypeList"/>
+            </div>
+        </div>
+        <div class="form-group" style="text-align: center;">
+            <button id="submit_button" type="submit" class="btn-color btn" style="margin-left: -110px;margin-right: 25px;">保存</button>
+            <button id="cancel_button" type="button" onclick="cancel_save()" class="btn-color btn">取消</button>
+        </div>
+        <div class="form-group Alert" id="Alert">
+            <div style="overflow: auto;height: 372px">
+                <ul id="cityTree" class="ztree ztree2"></ul>
+                <div class="confir_cancle">
+                    <span class="confir" id="confir">确认</span>
+                    <span class="cancle" id="cancle">取消</span>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="/js/jquery.min.js-v=2.1.4.js" tppabs="http://www.zi-han.net/theme/hplus/js/jquery.min.js?v=2.1.4"></script>
+<script src="/js/bootstrap.min.js-v=3.3.5.js" tppabs="http://www.zi-han.net/theme/hplus/js/bootstrap.min.js?v=3.3.5"></script>
+<script src="/js/content.min.js-v=1.0.0.js" tppabs="http://www.zi-han.net/theme/hplus/js/content.min.js?v=1.0.0"></script>
+<script src="/js/plugins/chosen/chosen.jquery.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/chosen/chosen.jquery.js"></script>
+<script src="/js/plugins/jsKnob/jquery.knob.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/jsKnob/jquery.knob.js"></script>
+<script src="/js/plugins/jasny/jasny-bootstrap.min.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/jasny/jasny-bootstrap.min.js"></script>
+<script src="/js/plugins/datapicker/bootstrap-datepicker.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/datapicker/bootstrap-datepicker.js"></script>
+<script src="/js/plugins/prettyfile/bootstrap-prettyfile.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/prettyfile/bootstrap-prettyfile.js"></script>
+<script src="/js/plugins/nouslider/jquery.nouislider.min.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/nouslider/jquery.nouislider.min.js"></script>
+<script src="/js/plugins/iCheck/icheck.min.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/iCheck/icheck.min.js"></script>
+<script src="/js/plugins/metisMenu/jquery.metisMenu.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script src="/js/plugins/colorpicker/bootstrap-colorpicker.min.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/colorpicker/bootstrap-colorpicker.min.js"></script>
+<script src="/js/plugins/clockpicker/clockpicker.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/clockpicker/clockpicker.js"></script>
+<script src="/js/plugins/cropper/cropper.min.js" tppabs="http://www.zi-han.net/theme/hplus/js/plugins/cropper/cropper.min.js"></script>
+<script src="/js/info-save.js"></script>
+<script th:src="@{/js/bootstrap-multiselect.js}"></script>
+<script src="/js/jquery-1.10.2.min.js"></script>
+<script src="/js/multiple-select.js"></script>
+<script src="/js/select.js"></script>
+<script type="text/javascript" src="/js/popper.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/departselect.js"></script>
+<script type="text/javascript" src="/js/bootstrap-multiselect.js"></script>
+<script type="text/javascript" src="/js/jquery.validate.js"></script>
+<script language="javascript" type="text/javascript" src="/js/jquery.ztree.core.js"></script>
+<script language="javascript" type="text/javascript" src="/js/jquery.ztree.excheck.js"></script>
+<script type="text/javascript" src="/js/department-tree-mem.js"></script>
+</body>
+</html>

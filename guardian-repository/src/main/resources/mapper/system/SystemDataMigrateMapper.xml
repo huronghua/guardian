@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.system.SystemDataMigrateMapper" >
+
+    <!--adminAccount插入SsoUser-->
+    <insert id="adminAccountInsertIntoSsoUser">
+      INSERT INTO sso_user (
+        account,
+        PASSWORD,
+        NAME,
+        email,
+        cellphone
+      )  SELECT
+                a.username,
+                a.`password`,
+                a.`name`,
+                a.email,
+                a.phone
+            FROM
+                admin_account a
+            LEFT JOIN sso_user b
+            ON    a.username = b.account
+            WHERE b.id IS NULL
+            AND a.delete_flag = 0
+            AND a.username IS NOT NULL
+    </insert>
+
+    <!--ssoUser表信息插入AdminAccount-->
+    <insert id="ssoUserInsertIntoAdminAccount">
+        INSERT INTO admin_account (
+                username,
+                PASSWORD,
+                NAME,
+                phone,
+                email
+            ) SELECT
+                a.account,
+                a.`password`,
+                a.`name`,
+                a.cellphone,
+                a.email
+            FROM
+                sso_user a
+          LEFT JOIN admin_account b
+               ON a.account = b.username
+           WHERE  b.id IS NULL
+               AND a.account IS NOT NULL
+    </insert>
+
+    <!--删除对照表信息-->
+    <delete id="deleteSsoContrastId">
+        delete from sso_contrast_id
+    </delete>
+
+    <!--插入对照表信息-->
+    <insert id="insertIntoSsoContrastId">
+        INSERT INTO sso_contrast_id (
+            user_id,
+            contrast_id,
+            contrast_account,
+            contrast_name
+          ) SELECT
+                b.id,
+                a.id,
+                a.`name`,
+                a.`password`
+            FROM
+                admin_account a
+            LEFT JOIN sso_user b
+               ON a.username = b.account
+          WHERE a.delete_flag = 0
+    </insert>
+
+    <!--插入未知部门-->
+    <insert id="insertIntoNoneDepartment">
+      INSERT INTO sso_department
+         (NAME,
+         parent_id)
+       VALUES
+      ('未知部门', 0)
+    </insert>
+
+    <!--插入部门组信息-->
+    <insert id="insertIntoSsoDepartmentGroup">
+       INSERT INTO sso_department_group
+            (id,
+            department_id)
+       SELECT
+            department_id,
+            (
+            SELECT
+                MAX(id)
+            FROM
+                sso_department)
+         FROM
+	        sso_user
+         WHERE
+	   employee_id IS NULL
+    </insert>
+
+    <!--密码更新-->
+    <update id="updatePassword">
+        UPDATE sso_user a,
+                admin_account b
+         SET a.`password` = b.`password`
+        WHERE
+          a.account = b.username
+       AND b.delete_flag = 0
+    </update>
+
+    <!--更新部门ID-->
+    <update id="updateDepartmentIdOfSsoUser">
+       UPDATE sso_user
+         SET department_id = id
+      WHERE
+	    employee_id IS NULL
+    </update>
+
+    <!--密码初始化为-->
+    <update id="updateInitPassword">
+        UPDATE sso_user
+          SET `password` = 'e10adc3949ba59abbe56e057f20f883e'
+          WHERE `password` LIKE 'bm00%'
+    </update>
+
+</mapper>

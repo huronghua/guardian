@@ -1,0 +1,48 @@
+server:
+  port: 8105
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  datasource:
+    url: jdbc:mysql://rdsry5ng8fus2v021v53.mysql.rds.aliyuncs.com:3306/banma?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&useSSL=true
+    username: banma
+    password: banma123
+    driver-class-name: com.mysql.jdbc.Driver
+  application:
+    name: guardian
+
+#mybatis配置
+mybatis:
+  typeAliasesPackage: com.banmatrip.guardian.domain
+  mapperLocations: classpath*:mapper/*/*.xml
+  configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration.call-setters-on-nulls: true
+
+#oauth客户端配置
+security:
+  ignored: /favicon.ico,/scripts/**,/styles/**,/images/**
+  sessions: always
+  oauth2:
+    sso:
+      login-path: /login
+    client:
+      client-id: ssoclient
+      client-secret: ssosecret
+      access-token-uri: http://guardian.auth.bmtrip.com/oauth/token
+      user-authorization-uri: http://guardian.auth.bmtrip.com/oauth/authorize
+      client-authentication-scheme: form
+    resource:
+      jwt:
+        key-uri: http://guardian.auth.bmtrip.com/oauth/token_key
+
+#安全配置
+securityconfig:
+  logoutsuccssurl: /tosignout
+  permitall: /rest/**
+  deniedpage: /deny
+
+#登出配置
+sso:
+  tosignout:
+    url: http://guardian.auth.bmtrip.com/signout

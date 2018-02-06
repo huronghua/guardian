@@ -1,0 +1,51 @@
+<!DOCTYPE html >
+<html xmlns:th="www.thymeleaf.org">
+<head th:include="layout :: htmlhead"></head>
+<body>
+<form name="form1"  class="form1" id="form1" method="post">
+    <div class="tab_box">
+        <table class="tab">
+            <tr>
+                <td rowspan="3" background="/img/logo01.png" style=" height: 325px;width: 370px;"></td>
+                <td><div class="radioSet">姓名:<span th:text="${user.name}"></span></div></td>
+            </tr>
+            <tr>
+                <td><div class="radioSet">工号: <span th:text="${user.employeeId}"></span></div></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="radioSet">
+                        密码:
+                        <span class="hidePassword">******</span>
+                        <input class="password" value="" name="password" autocomplete="off" placeholder="密码不能为空"/>
+                    </div>
+                    <span class="tips">点击密码即可进行修改</span>
+                </td>
+            </tr>
+            <tr>
+                <td><div class="radioSet">岗位: <span th:text="${position}"></span></div></td>
+                <td><div class="radioSet">系统登录账号:<span th:text="${user.account}"></span></div></td>
+            </tr>
+            <tr>
+                <td><div class="radioSet">族群: <span th:text="${ethnic}"></span></div></td>
+                <td><div class="radioSet" style="overflow: auto">序列:<span th:text="${roleType}"></span></div></td>
+            </tr>
+            <tr>
+                <td><div class="radioSet">企业邮箱: <span th:text="${user.email}"></span></div></td>
+                <td><div class="radioSet">手机号: <span th:text="${user.cellphone}"></span></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div class="radioSet" style="line-height: 40px;overflow: auto;width: 684px">所属部门: <span th:text="${allDepartmentName}"></span></div></td>
+            </tr>
+        </table>
+        <p class="btn_box">
+            <span class="btn-color btn"  id="save_btn">保存</span>
+        </p>
+    </div>
+<script type="text/javascript" th:src="@{/js/popper.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/department/personal.js}"></script>
+</form>
+</body>
+</html>

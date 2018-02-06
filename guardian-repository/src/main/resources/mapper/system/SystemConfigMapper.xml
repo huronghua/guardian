@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.system.SystemConfigMapper" >
+    <resultMap id="BaseResultMap" type="com.banmatrip.guardian.domain.SystemConfig" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="url" property="url" jdbcType="VARCHAR" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, name,url,sort, create_time, update_time
+    </sql>
+    <select id="selectSystemConfig" resultMap="BaseResultMap">
+        SELECT
+        id, name, url,sort, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time, DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') as update_time
+        FROM sso_system_config
+        ORDER BY sort ASC
+    </select>
+    <select id="selectSystemConfigById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+          id, name, url,sort, DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as create_time, DATE_FORMAT(update_time,'%Y-%m-%d %H:%i:%s') as update_time
+        FROM sso_system_config
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+    <update id="updateSystemConfig" parameterType="com.banmatrip.guardian.domain.SystemConfig">
+        UPDATE sso_system_config
+        SET `name` = #{name,jdbcType=VARCHAR},
+          url = #{url,jdbcType=VARCHAR},
+          update_time = now()
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+    <delete id="deleteSystemConfig" parameterType="com.banmatrip.guardian.domain.SystemConfig">
+        DELETE FROM sso_system_config
+        WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+    <update id="updateSystemConfigSort" parameterType="com.banmatrip.guardian.domain.SystemConfig">
+        UPDATE sso_system_config
+        SET sort = #{sort,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+    <insert id="addSystemConfig" parameterType="com.banmatrip.guardian.domain.SystemConfig">
+        INSERT INTO sso_system_config (name, url,sort,create_time,update_time)
+    values (#{name,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, now(),now())
+  </insert>
+</mapper>

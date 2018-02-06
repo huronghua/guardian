@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head th:include="layout :: htmlhead"></head>
+<body>
+<form name="form1" class="form1" id="form1" target="_parent" method="post">
+    <input type="hidden" id="depWithEcho" name="depWithEcho" class="chec" th:value="${depWithEcho}"/>
+    <input type="hidden" name="departmentId" id="departmentId" th:value="${departmentId}"/>
+    <input type="hidden" id="diffRole" name="diffRole" th:value="${diffRole}"/>
+    <input type="hidden" id="diffDepartment" name="diffDepartment" th:value="${diffDepartment}"/>
+    <input type="hidden" id="parentId" name="departmentList" value=""/>
+    <input type="hidden" id="memberIdList" name="memberIdList" th:value="${memberIdList}"/>
+    <div><br/>
+        <table class="department">
+            <tr>
+                <td>
+                    <div class="form-group" th:if="${diffRole} != 1">
+                        <label class="col-sm-2 control-label">分配角色</label>
+                        <div class="col-sm-10" >
+                            <select id="roleList" class="roleList" multiple="true" >
+                                <option th:each="rt :${roleList}" th:value="${rt.id}" th:selected="${#lists.contains(roleListNow,rt.id)}">
+                                    <span th:text="${rt.name}">角色</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="roleList" class="roleListBack" value=""/>
+                        </div>
+                    </div>
+                    <div class="form-group" th:if="${diffRole} == 1">
+                        <label class="col-sm-2 control-label">分配角色</label>
+                        <div class="col-sm-10" >
+                            <input type="text" class="input-border" value="所选成员角色不完全相同，无法进行批量修改" disabled="disabled" style="width: 450px;background-color: #c5bdbd;"/>
+                            <input type="hidden" name="diffRole" th:value="${diffRole}" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 6px">
+                    <div class="form-group" th:if="${diffDepartment} != 1">
+                        <label class="col-sm-2 control-label">部门*</label>
+                        <div class="col-sm-10" style="margin-top: -5px" >
+                            <ul id="cityTree" class="ztree ztree2"></ul>
+                        </div>
+                    </div>
+                    <div class="form-group" th:if="${diffDepartment} == 1">
+                        <label class="col-sm-2 control-label">部门*</label>
+                        <div class="col-sm-10" style="margin-top: -5px" >
+                            <input type="text" class="input-border" value="所选成员部门不完全相同，无法进行批量修改" disabled="disabled" style="width: 450px;background-color: #c5bdbd;"/>
+                            <input type="hidden" name="diffDepartment" th:value="${diffDepartment}" />
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">目的地</label>
+                        <div class="col-sm-10" >
+                            <select id="tag" class="tag" multiple="true" >
+                                <option th:each="tag :${tag}" th:value="${tag.id}">
+                                    <span th:text="${tag.name}">目的地</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="tag" class="tagBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="top: 1px">渠道</label>
+                        <div class="col-sm-10" >
+                            <select name="platform" multiple="multiple" id="platform" class="orderPlatform">
+                                <optgroup th:each="platform:${platform}" th:label="${platform.name}" >
+                                    <option  th:text="${platform.name}" th:value="${platform.id}" th:selected="${platform.isTrue}"/>
+                                    <option th:each="children:${platform.get('children')}" th:text="${children.name} ? ${children.name} : ''" th:value="${children.id} ? ${children.id} : ''" th:selected="${children.isTrue}"></option>
+                                </optgroup>
+                            </select>
+                            <input type="hidden" name="orderPlatform" class="orderPlatformBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" style="top: 2px;">产品类型</label>
+                        <div class="col-sm-10" >
+                            <select id="productType" class="productType" multiple="true" >
+                                <option th:each="product :${productOrderTag}" th:value="${product.id}">
+                                    <span th:text="${product.name}">产品类型</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="productType" class="productTypeBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">资源类型</label>
+                        <div class="col-sm-10" >
+                            <select id="resourceType" class="resourceType" multiple="true" >
+                                <option th:each="rt :${resourceType}" th:value="${rt.id}">
+                                    <span th:text="${rt.name}">资源类型</span>
+                                </option>
+                            </select>
+                            <input type="hidden" name="resourceType" class="ressourceTypeBack" value=""/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center;padding-top: 20px">
+                    <input class="btn-color btn " type="button" id="save" value="保存" />
+                    <input class="btn-color btn " type="button" id="cancel" value="取消" style="margin-left: 40px"/>
+                </td>
+            </tr>
+        </table>
+    </div><br/>
+</form>
+<script type="text/javascript" th:src="@{/js/popper.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-multiselect.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker.zh-CN.js}"></script>
+<script type="text/javascript" th:src="@{/js/multiple-select.js}"></script>
+<script th:src="@{/js/member/memberBatchEdit.js}"></script>
+<script th:src="@{/js/layer.js}"></script>
+<script th:src="@{/js/department-tree-batch.js}"></script>
+<script th:src="@{/js/jquery.ztree.core.js}"></script>
+<script th:src="@{/js/jquery.ztree.excheck.js}"></script>
+<script th:src="@{/js/jquery.ztree.exhide.js}"></script>
+</body>
+</html>

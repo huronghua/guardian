@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.membership.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.banmatrip.guardian.domain.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <id column="account" property="account" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="cellphone" property="cellphone" jdbcType="VARCHAR" />
+    <result column="employee_id" property="employeeId" jdbcType="VARCHAR" />
+    <result column="ethnic" property="ethnic" jdbcType="VARCHAR" />
+    <result column="position_id" property="positionId" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="update_id" property="updateId" jdbcType="INTEGER" />
+    <result column="disable_status" property="disableStatus" jdbcType="INTEGER" />
+    <result column="role_type" property="roleType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,account,name, password, email, department_id, cellphone, employee_id, ethnic,
+    position_id, create_time, update_time, create_id, update_id,role_type,disable_status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllUser" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    where 1=1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from sso_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.banmatrip.guardian.domain.User" >
+    insert into sso_user (id,account,name, password,
+    email, department_id, cellphone,
+    employee_id, ethnic, position_id,
+    create_time, update_time, create_id,
+    update_id,role_type)
+    values (#{id,jdbcType=INTEGER},#{account,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
+    #{email,jdbcType=VARCHAR}, #{departmentId,jdbcType=INTEGER}, #{cellphone,jdbcType=VARCHAR},
+    #{employeeId,jdbcType=VARCHAR}, #{ethnic,jdbcType=VARCHAR}, #{positionId,jdbcType=VARCHAR},
+    #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=INTEGER},
+    #{updateId,jdbcType=INTEGER},#{roleType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.banmatrip.guardian.domain.User" >
+    insert into sso_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="departmentId != null" >
+        department_id,
+      </if>
+      <if test="cellphone != null" >
+        cellphone,
+      </if>
+      <if test="employeeId != null" >
+        employee_id,
+      </if>
+      <if test="ethnic != null" >
+        ethnic,
+      </if>
+      <if test="positionId != null" >
+        position_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="updateId != null" >
+        update_id,
+      </if>
+      <if test="roleType != null" >
+        role_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null" >
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="cellphone != null" >
+        #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeId != null" >
+        #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnic != null" >
+        #{ethnic,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=INTEGER},
+      </if>
+      <if test="roleType != null" >
+        #{roleType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.banmatrip.guardian.domain.User" >
+    update sso_user
+    <set >
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="departmentId != null" >
+        department_id = #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="cellphone != null" >
+        cellphone = #{cellphone,jdbcType=VARCHAR},
+      </if>
+      <if test="employeeId != null" >
+        employee_id = #{employeeId,jdbcType=VARCHAR},
+      </if>
+      <if test="ethnic != null" >
+        ethnic = #{ethnic,jdbcType=VARCHAR},
+      </if>
+      <if test="positionId != null" >
+        position_id = #{positionId,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="updateId != null" >
+        update_id = #{updateId,jdbcType=INTEGER},
+      </if>
+      <if test="roleType != null" >
+        role_type = #{roleType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.banmatrip.guardian.domain.User" >
+    update sso_user
+    set account = #{account,jdbcType=VARCHAR},
+    name = #{name,jdbcType=VARCHAR},
+    password = #{password,jdbcType=VARCHAR},
+    email = #{email,jdbcType=VARCHAR},
+    department_id = #{departmentId,jdbcType=INTEGER},
+    cellphone = #{cellphone,jdbcType=VARCHAR},
+    employee_id = #{employeeId,jdbcType=VARCHAR},
+    ethnic = #{ethnic,jdbcType=VARCHAR},
+    position_id = #{positionId,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_time = #{updateTime,jdbcType=TIMESTAMP},
+    create_id = #{createId,jdbcType=INTEGER},
+    update_id = #{updateId,jdbcType=INTEGER},
+    role_type = #{roleType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--根据角色id查询出属于该角色下的所有成员-->
+  <select id="findUserByRoleId" resultType="com.banmatrip.guardian.vo.role.RoleMemberVo" parameterType="java.lang.Integer" >
+    SELECT
+    a.id AS id,
+    b.role_id AS  roleId,
+    a.account as account,
+    a.`name` AS memberName,
+    a.position_id AS positionId,
+    c.`name` AS position,
+    a.email,
+    a.employee_id AS employeeId,
+    a.cellphone
+    FROM
+    sso_user a
+    JOIN (SELECT * FROM sso_user_role WHERE delete_flag = 'N') b ON a.id = b.user_id
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id
+    WHERE
+    b.role_id = #{roleId} AND disable_status = 0
+  </select>
+  <!--查询所有没有配置权限的用户-->
+  <select id="getMemberWithoutRole" resultType="com.banmatrip.guardian.vo.role.RoleMemberVo">
+    SELECT
+    a.id AS id,
+    a.account as account,
+    a.`name` AS memberName,
+    a.position_id AS positionId,
+    c.`name` AS position,
+    a.email,
+    a.employee_id AS employeeId,
+    a.cellphone
+    FROM
+    sso_user a
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id
+    WHERE
+    a.id NOT IN (SELECT DISTINCT user_id FROM `sso_user_role` WHERE delete_flag = 'N')
+    ORDER BY
+    account
+  </select>
+  <!--查询所有没有配置权限的用户数-->
+  <select id="getMemberCountWithoutRole" resultType="java.lang.Integer">
+    SELECT
+    COUNT(*)
+    FROM
+    sso_user
+    WHERE
+    id NOT IN
+    (SELECT DISTINCT user_id FROM `sso_user_role` WHERE delete_flag = 'N')
+  </select>
+  <select id="getDestination" resultType="java.util.Map" >
+    SELECT
+    *
+    FROM
+    tag
+    WHERE group_id = 2 and delete_flag = 0
+  </select>
+  <select id="getPlatformParentId" resultType="java.lang.Integer" >
+    SELECT
+    distinct parent_platform_id
+    FROM
+    order_platform
+  </select>
+  <select id="getPlatformById" resultType="java.util.Map" >
+    SELECT
+    *
+    FROM
+    order_platform WHERE id = #{id}
+  </select>
+  <select id="getChildPlatform" resultType="java.util.Map" >
+    SELECT
+    *
+    FROM
+    order_platform
+    WHERE parent_platform_id = #{parentId}
+  </select>
+  <select id="getProductType" resultType="java.util.Map" >
+    SELECT
+    *
+    FROM
+    product_order_tag
+  </select>
+  <select id="selectDesById" resultType="java.util.Map" >
+    SELECT
+    *
+    FROM
+    sso_user_data_range
+  </select>
+  <update id="updateUser" parameterType="java.util.Map">
+    update sso_user
+    set `name` = #{name},
+    email = #{email},
+    department_id = #{departmentGroupId},
+    cellphone = #{userCellphone},
+    employee_id = #{employeeId},
+    account = #{account},
+    ethnic= #{ethnic},
+    position_id = #{position},
+    role_type = #{roleType}
+    where id = #{id}
+  </update>
+  <select id="selectDataRangeById" resultType="java.util.Map" >
+    SELECT
+    *
+    FROM
+    sso_user_data_range
+    WHERE id = #{id}
+  </select>
+
+  <delete id="deleteByUserId" parameterType="java.lang.Integer" >
+    delete from sso_user
+    where id = #{id}
+  </delete>
+
+  <insert id="insertUser">
+    insert into sso_user (account,id,`name`,
+    email, department_id, cellphone,
+    employee_id, ethnic, position_id,
+    role_type
+    )
+    values
+    ( #{account},#{id}, #{name},
+    #{email}, #{departmentGroupId}, #{userCellphone},
+    #{employeeId}, #{ethnic}, #{position},#{roleType})
+  </insert>
+
+  <select id="selectDepById" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
+    select
+    b.department_id
+    from sso_user a
+    LEFT JOIN sso_department_group b on b.id =  a.department_id
+    WHERE a.id = #{id} AND a.disable_status = 0
+  </select>
+
+  <!--根据用户输入数据进行成员名字的模糊查询-->
+  <select id="ajaxSearch" resultType="com.banmatrip.guardian.vo.role.RoleMemberVo" parameterType="java.util.Map">
+    SELECT
+    a.id AS id,
+    a.`name` AS memberName,
+    a.position_id AS positionId,
+    b.`name` AS position,
+    a.email,
+    a.employee_id AS employeeId,
+    a.cellphone
+    FROM
+    sso_user a
+    JOIN (SELECT * FROM sso_dictionary WHERE type = 1) b ON b.`code` = a.position_id
+    WHERE
+    a.name LIKE CONCAT('%', #{textSearch}, '%')
+    AND a.id NOT IN (SELECT user_id FROM sso_user_role WHERE delete_flag = 'N' AND role_id = #{roleId})
+    AND a.disable_status = 0
+  </select>
+  <!--根据账号查询用户信息-->
+  <select id="selectByAccount" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from sso_user
+    where account = #{account} AND disable_status = 0
+  </select>
+
+  <update id="updatePassword" parameterType="java.util.Map">
+    UPDATE sso_user
+    SET `password` = #{password}
+    WHERE `id` = #{id}
+  </update>
+  <update id="updateAdminPassword" parameterType="java.util.Map">
+    UPDATE admin_account
+    SET `password` = #{password}
+    WHERE `username` = #{username}
+  </update>
+
+  <select id="getChildChannelDictionaryByParentId" resultType="java.util.LinkedHashMap">
+    SELECT id,`name`
+    FROM order_platform
+    WHERE parent_platform_id = #{id} AND delete_flag = 0
+  </select>
+
+  <select id="selectById" resultType="java.util.Map" parameterType="java.lang.Integer" >
+    select
+    *
+    from sso_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <insert id="insertUserByNoId" keyProperty="id" parameterType="java.util.Map" useGeneratedKeys="true" keyColumn="id">
+    <selectKey resultType="int" order="AFTER" keyProperty="id">
+      SELECT LAST_INSERT_ID() as id
+    </selectKey>
+    insert into sso_user (password,account,`name`,
+    email, department_id, cellphone,
+    employee_id, ethnic, position_id,
+    role_type
+    )
+    values
+    (#{password},#{account},#{name},
+    #{email}, #{departmentGroupId}, #{userCellphone},
+    #{employeeId}, #{ethnic}, #{position},#{roleType})
+  </insert>
+
+  <select id="selectMaxDepId" resultType="java.lang.Integer">
+    SELECT
+    MAX(id)
+    FROM sso_department_group
+  </select>
+
+  <select id="selectUserNameList" resultType="java.lang.String">
+    SELECT
+    `name`
+    FROM sso_user
+  </select>
+
+  <select id="selectAccountList" resultType="java.lang.String">
+    SELECT
+    `account`
+    FROM sso_user
+  </select>
+
+  <select id="getMemberByDepartmentId" resultType="java.util.HashMap">
+    SELECT
+    a.id,
+    cellphone,
+    b.department_id,
+    email,
+    employee_id,
+    a.`name`,
+    position_id,
+    c.`name` as position_name,
+    disable_status
+    FROM
+    sso_user a
+    JOIN  (select * from sso_department_group where delete_flag=0) b ON a.department_id = b.id
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id where b.department_id=#{id} AND a.disable_status = 0
+  </select>
+
+  <select id="getMemberByDepartmentIdHasDepartment" resultType="java.util.HashMap">
+    SELECT
+    a.id,
+    cellphone,
+    b.department_id,
+    email,
+    employee_id,
+    a.`name`,
+    position_id,
+    c.`name` as position_name,
+    disable_status
+    FROM
+    sso_user a
+    JOIN  (select * from sso_department_group where delete_flag=0) b ON a.department_id = b.id
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id where a.disable_status = 0
+  </select>
+
+  <select id="getMemberByDepartmentIdNoDepartment" resultType="java.util.HashMap">
+    SELECT
+    a.id,
+    cellphone,
+    b.department_id,
+    email,
+    employee_id,
+    a.`name`,
+    position_id,
+    c.`name` as position_name,
+    disable_status
+    FROM
+    sso_user a
+    JOIN  (select * from sso_department_group where delete_flag=1) b ON a.department_id = b.id
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id where a.disable_status = 0
+  </select>
+
+  <select id="getMemberFromRoot" resultType="java.util.HashMap">
+    SELECT
+    a.id,
+    cellphone,
+    b.department_id,
+    email,
+    employee_id,
+    a.`name`,
+    position_id,
+    c.`name` as position_name,
+    disable_status
+    FROM
+    sso_user a
+    JOIN  (select * from sso_department_group where delete_flag=0) b ON a.department_id = b.id AND b.department_id = #{id}
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id where a.disable_status = 0
+  </select>
+
+  <select id="getPeopleCount" resultType="java.lang.Integer">
+    select count(*)
+    from sso_user a
+    left join (select * from sso_department_group WHERE delete_flag = 0) b on a.department_id=b.id
+    where b.department_id in
+    <foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+      #{item.id}
+    </foreach>
+  </select>
+
+
+  <select id="findUserIdByRoleId" resultType="java.lang.Integer">
+    select user_id from sso_user_role where role_id = #{roleId}
+  </select>
+
+  <select id="findDepartmentIdByRoleId" resultType="java.lang.Integer">
+    select distinct b.department_id from sso_user_role a INNER join sso_user b  on a.user_id=b.id  where a.role_id = #{roleId}
+  </select>
+
+  <select id="findDepartmentIdByAccount" resultType="java.lang.Integer">
+    select b.department_id from sso_user a join sso_department_group b on a.department_id=b.id where a.account=#{loginAccount}
+  </select>
+
+  <select id="selectPositionIdList" resultType="java.lang.String">
+    SELECT
+    position_id
+    FROM sso_user
+    WHERE id = #{id}
+  </select>
+
+  <select id="selectRoleTypeIdList" resultType="java.lang.String">
+    SELECT
+    role_type
+    FROM sso_user
+    WHERE id = #{id}
+  </select>
+
+  <select id="selectEthnicIdList" resultType="java.lang.String">
+    SELECT
+    ethnic
+    FROM sso_user
+    WHERE id = #{id}
+  </select>
+
+  <!--根据名字查询用户-->
+  <select id="queryUserByName" resultType="java.util.HashMap">
+    SELECT
+    a.id,
+    cellphone,
+    b.department_id,
+    email,
+    employee_id,
+    a.`name`,
+    position_id,
+    c.`name` as position_name,
+    a.disable_status
+    FROM
+    sso_user a
+    LEFT JOIN  sso_department_group b ON a.department_id = b.id
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id
+    where a.name like concat('%',#{name},'%')
+    GROUP BY a.id
+  </select>
+  <select id="selectChargeByName" parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT
+      `id`,`name`,employee_id
+    FROM
+    sso_user
+    WHERE
+    name like concat('%',#{charge},'%') AND `department_id` IN (SELECT DISTINCT `id` FROM sso_department_group WHERE delete_flag = 0)
+  </select>
+  <select id="selectChargeByNameAjax" parameterType="java.lang.String" resultType="java.util.Map">
+    SELECT
+    `id`,`name`,employee_id
+    FROM
+    sso_user
+    WHERE
+    name like concat('%',#{charge},'%')
+  </select>
+  <select id="selectAllChargeByName" resultType="java.util.Map">
+    SELECT
+    `id`,`name`,employee_id
+    FROM sso_user
+    WHERE
+    `department_id` IN (SELECT DISTINCT `id` FROM sso_department_group WHERE delete_flag = 0)
+  </select>
+  <insert id="insertByUserList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
+    INSERT INTO sso_user (password,account,`name`,
+    email, department_id, cellphone,
+    employee_id, ethnic, position_id,role_type,create_time,update_time,create_id,update_id)
+    VALUES
+    <foreach collection="list" index="index" item="user" separator=",">
+      (#{user.password},#{user.account},#{user.name},
+      #{user.email}, #{user.departmentGroupId}, #{user.userCellphone},
+      #{user.employeeId}, #{user.ethnic}, #{user.position},#{user.roleType},now(),now(),#{user.createId},#{user.updateId})
+    </foreach>
+  </insert>
+  <insert id="insertAdminAcountByUserList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id" >
+    INSERT INTO admin_account (`username`,`password`,`name`,`head`,`email`,`sign`,
+    `nickname`,`head_pic`,`phone`,`privilege`,`delete_flag`,
+    `record_time`,`update_time`,`duty_or_not`,`member_id`)
+    VALUES
+    <foreach collection="list" index="index" item="user" separator=",">
+      (#{user.account},#{user.password},#{user.name},NULL,#{user.email},NULL,
+      NULL,NULL,#{user.userCellphone},NULL,0,
+      now(),now(),1,NULL)
+    </foreach>
+  </insert>
+  <update id="updateDepartmentByUserList" parameterType="java.util.List">
+    <foreach close="" collection="list" index="index" item="user" open="" separator=";">
+      UPDATE sso_user <set> department_id = #{user.id} </set>
+      WHERE id=#{user.id}
+    </foreach>
+  </update>
+
+  <select id="selectUserEmployeeId" resultType="java.lang.String" >
+    SELECT
+    employee_id
+    FROM
+    sso_user
+  </select>
+
+  <select id="selectUserOrangeAcc" resultType="java.lang.String" >
+    SELECT
+    account
+    FROM
+    sso_user
+  </select>
+
+  <select id="selectUserEmail" resultType="java.lang.String" >
+    SELECT
+    email
+    FROM
+    sso_user
+  </select>
+
+  <select id="selectUserEmployeeIdEx" resultType="java.lang.String">
+    SELECT
+    employee_id
+    FROM
+    sso_user
+    where id != #{id}
+  </select>
+
+  <select id="selectUserOrangeAccEx" resultType="java.lang.String" >
+    SELECT
+    account
+    FROM
+    sso_user
+    where id != #{id}
+  </select>
+
+  <select id="selectUserEmailEx" resultType="java.lang.String" >
+    SELECT
+    email
+    FROM
+    sso_user
+    where id != #{id}
+  </select>
+  <select id="getUserNameCheck" resultType="java.lang.String" >
+    SELECT
+    `name`
+    FROM
+    sso_user
+    where id != #{id}
+  </select>
+  <select id="getNewUserNameCheck" resultType="java.lang.String" >
+    SELECT
+    `name`
+    FROM
+    sso_user
+  </select>
+  <delete id="deleteUserById" parameterType="java.lang.Integer">
+    UPDATE sso_user SET disable_status = 1
+    WHERE id = #{userId}
+  </delete>
+  <select id="selectAllUserAccount" resultType="java.util.LinkedHashMap">
+    SELECT `username`,`email`,`phone`,`name`
+    FROM admin_account
+    WHERE delete_flag = 0
+  </select>
+  <insert id="insertOneByUserList" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO sso_user (password,account,`name`,
+    email, department_id, cellphone,
+    employee_id, ethnic, position_id,role_type,create_time,update_time,create_id,update_id)
+    VALUES
+      (#{password},#{account},#{name},
+      #{email}, #{departmentGroupId}, #{userCellphone},
+      #{employeeId}, #{ethnic}, #{position},#{roleType},now(),now(),#{createId},#{updateId})
+  </insert>
+  <insert id="insertOneAdminAcountByUserList" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO admin_account (`username`,`password`,`name`,`head`,`email`,`sign`,
+    `nickname`,`head_pic`,`phone`,`privilege`,`delete_flag`,
+    `record_time`,`update_time`,`duty_or_not`,`member_id`)
+    VALUES
+      (#{account},#{password},#{name},NULL,#{email},NULL,
+      NULL,NULL,#{userCellphone},NULL,0,
+      now(),now(),1,NULL)
+  </insert>
+  <insert id="insertSSOContrast">
+    INSERT INTO sso_contrast_id (`user_id`,`contrast_id`,`contrast_account`,`contrast_name`)
+    VALUES
+    (#{userId},#{id},#{account},#{name})
+  </insert>
+  <select id="selectAllAuth" resultType="java.util.LinkedHashMap">
+    SELECT
+      `id`,`name`
+    FROM authority_group
+    WHERE delete_flag = 0
+  </select>
+  <insert id="insertInitAuth">
+    INSERT INTO privilege (admin_id,privilege)
+    VALUES
+    (#{adminId},#{privilege})
+  </insert>
+  <!--查询禁用成员-->
+  <select id="selectAllDisableMember" resultType="java.util.HashMap">
+    SELECT
+    a.id,
+    cellphone,
+    b.department_id,
+    email,
+    employee_id,
+    a.`name`,
+    position_id,
+    c.`name` as position_name,
+    disable_status
+    FROM
+    sso_user a
+    LEFT JOIN sso_department_group b ON a.department_id = b.id
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 1) c ON c.`code` = a.position_id where disable_status = 1
+  </select>
+  <select id="selectPlatformWhithoutChil" resultType="java.util.Map" >
+    SELECT
+	*
+FROM
+	order_platform
+WHERE
+	parent_platform_id = 0
+AND id NOT IN (
+	SELECT
+		parent_platform_id
+	FROM
+		order_platform
+)
+AND delete_flag = 0
+  </select>
+
+  <select id="selectAdminAccountById" resultType="java.lang.Integer">
+    SELECT contrast_id as adminAccountId
+    FROM sso_contrast_id
+    WHERE user_id = #{id}
+  </select>
+  <update id="updateOneAdminAcountByUserList">
+    update admin_account
+    set
+    `username` = #{account},
+    `name` = #{name},
+    `email` = #{email},
+    `phone` = #{userCellphone},
+    `update_time` = now()
+    where id = #{adminAccountId}
+  </update>
+
+  <update id="passwordRest">
+    UPDATE admin_account a,
+      sso_user b,
+      sso_contrast_id c
+    SET a.`password` = MD5(#{password}),
+      b.`password` = MD5(#{password})
+    WHERE
+      c.user_id = #{id}
+    AND c.contrast_id = a.id
+    AND c.user_id = b.id
+  </update>
+</mapper>

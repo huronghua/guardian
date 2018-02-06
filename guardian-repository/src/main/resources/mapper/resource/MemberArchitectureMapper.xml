@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.resource.MemberArchitectureMapper">
+
+    <!--获取成员信息-->
+    <select id="getMemberInfo" parameterType="com.banmatrip.guardian.dto.request.resource.QueryMemberParam"
+            resultType="com.banmatrip.guardian.dto.response.resource.MemberInfo">
+        SELECT
+        a.id,
+        b.contrast_id AS contrastId,
+        a.account,
+        a.`name`,
+        a.email,
+        a.department_id AS departmentGroupId,
+        a.employee_id AS employeeId,
+        a.cellphone,
+        c.`name` AS ethnicName,
+        d.`name` AS positionName,
+        e.`name` AS serialName
+        FROM
+        sso_user a
+        LEFT JOIN sso_contrast_id b
+        ON a.id = b.user_id
+        LEFT JOIN sso_dictionary c
+        ON c.type = '7'  <!--对应数据字典族群-->
+        AND a.ethnic = c.`code`
+        LEFT JOIN sso_dictionary d
+        ON d.type = '1' <!--对应数据字典岗位-->
+        AND a.position_id = d.`code`
+        LEFT JOIN sso_dictionary e
+        ON e.type = '2' <!--对应数据字典角色类型-->
+        AND a.role_type = e.`code`
+        <where>
+            <if test="account != null">
+                a.account = #{account}
+            </if>
+            <if test="userId != null">
+                a.id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <!--查询部门信息-->
+    <select id="getDepartmentInfo" parameterType="com.banmatrip.guardian.dto.request.resource.QueryDepartmentParam"
+            resultType="com.banmatrip.guardian.dto.response.resource.DepartmentInfo">
+        SELECT
+        a.id AS departmentGroupId,
+        b.id AS departmentId,
+        b.parent_id AS parentDepartmentId,
+        b.type AS departmentLevel,
+        d.`name` AS departmentLevelName,
+        b.`name` AS departmentName,
+        c.`name` AS chargeName
+        FROM
+        sso_department b
+        LEFT JOIN sso_department_group a
+        ON a.department_id = b.id
+        LEFT JOIN
+        sso_user c
+        ON b.charge_id = c.id
+        LEFT JOIN
+        sso_dictionary d
+        ON d.type = '4'  <!--对应数据字典部门级别-->
+        AND d.`code` = b.type
+        WHERE b.delete_flag=0
+        AND ((a.delete_flag is not null AND a.delete_flag = 0) OR a.delete_flag is null)
+        <if test="departmentGroupId != null">
+            AND a.id = #{departmentGroupId}
+        </if>
+        <if test="departmentId != null">
+            AND b.id = #{departmentId}
+        </if>
+    </select>
+
+    <select id="getDepartmentIdListByAccount" resultType="java.lang.Integer">
+        SELECT
+        b.department_id
+        FROM
+	    sso_user a
+        LEFT JOIN sso_department_group b ON a.department_id = b.id
+        WHERE
+	    a.account = #{account}
+    </select>
+    
+    <select id="getUserListByDepartmentId" resultType="com.banmatrip.guardian.dto.response.resource.UserInfo">
+        SELECT
+	    c.contrast_id as 'id',
+	    c.contrast_name as 'name',
+	    CASE a.position_id
+        WHEN 7 THEN
+	    0
+        ELSE
+	    1
+        END AS managerFlag
+        FROM
+	    sso_user a
+        LEFT JOIN sso_department_group b ON a.department_id = b.id
+        join sso_contrast_id c on a.id=c.user_id
+        WHERE
+	    b.department_id =#{departmentId} and c.contrast_id is not null
+    </select>
+    <select id="getUserDetailsInfoByIds" resultType="com.banmatrip.guardian.dto.response.resource.UserDetailInfo">
+        SELECT
+        c.id as id,c.name as name,a.employee_id as employeeId
+        FROM
+        admin_account c
+        LEFT JOIN sso_contrast_id b ON b.contrast_id = c.id
+        LEFT JOIN sso_user a ON a.id = b.user_id
+        WHERE c.id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    <select id="getAllUserDetailsInfo" resultType="com.banmatrip.guardian.dto.response.resource.UserDetailInfo">
+        SELECT
+        c.id as id,c.name as name,a.employee_id as employeeId
+        FROM
+        admin_account c
+        LEFT JOIN sso_contrast_id b ON b.contrast_id = c.id
+        LEFT JOIN sso_user a ON a.id = b.user_id
+    </select>
+</mapper>

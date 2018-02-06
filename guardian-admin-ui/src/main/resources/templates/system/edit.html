@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head th:include="layout :: htmlhead"></head>
+<body>
+<form name="form1" class="form1" id="form1" target="_parent" method="post">
+    <input type="hidden" name="id" id="id" th:value="${results.id}" />
+    <input type="hidden" name="info" id="info" class="info" th:value="${info}" />
+    <div><br/>
+        <table class="department">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">系统入口名称*</label>
+                        <div class="col-sm-10" >
+                            <input type="text" name="name" class="name input-border" id="name" th:value="${results.name}" placeholder="系统名称不能为空" style="width: 450px"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">系统url*</label>
+                        <div class="col-sm-10" >
+                            <input type="text" name="url" class="url input-border" id="url" th:value="${results.url}" style="width: 450px"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="padding-top: 20px;text-align: center">
+                    <input class="btn-color btn " type="button" id="save" value="保存" />
+                    <input class="btn-color btn " type="button" id="cancel" value="取消" style="margin-left: 15px"/>
+                </td>
+            </tr>
+        </table>
+    </div><br/>
+</form>
+<script type="text/javascript" th:src="@{/js/popper.js}"></script>
+<script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/system/system-config.js}"></script>
+</body>
+</html>

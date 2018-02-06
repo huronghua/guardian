@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:include="layout :: htmlhead"></head>
+<link rel="stylesheet" th:href="@{/css/function/bootstrap-theme.css}"  />
+<link rel="stylesheet" th:href="@{/css/function/bootstrap.min.css}"  />
+<body>
+<input type="hidden" name="success" id="success" th:value="${success}"/>
+<div class="con">
+    <div class="tit">
+        <div class="fl tit_l">
+            <i class="iconfont fl icon-quanxianguanli"></i>
+            <span class="fl">字典数据管理</span>
+        </div>
+        <div class="fr tit_r" style="left: -290px; top: 4px;">
+            <input type="text" class="search_txt fl" id="searchDictionaryName" placeholder="输入字典名称以搜索..." autocomplete="off" style="width: 240px;"/>
+            <i class="iconfont fl icon-sousuo" id="queryDictionary" style="margin-top: -3px"></i>
+            <div style="z-index: 100;position: absolute;">
+                <ul class="selec" id="selec" style="margin-top: 70px; margin-left: 0px; width: 240px; display: none;"></ul>
+            </div>
+        </div>
+        <div class="fr tit_r">
+            <a th:if="${dictionaryadd}"><i class="iconfont fl icon-tianjiafenzu" id="createDictionary" title="新增字典数据" name="createDictionary" style="color: #f96868;"></i></a>
+        </div>
+    </div>
+</div>
+<div>
+    <table class="table table-bordered" style="text-align: center">
+        <tr>
+            <td>
+                <h4>字典名称</h4>
+            </td>
+            <td>
+                <h4>字典代码</h4>
+            </td>
+            <td>
+                <h4>字典类型</h4>
+            </td>
+            <td>
+                <h4>操作</h4>
+            </td>
+        </tr>
+        <tr th:each="map:${dictionaryList}">
+            <td id="td_dictionary_id" th:hidden="true" th:value="${map.get('id')}"></td>
+            <td id="td_dictionary_type_id" th:hidden="true" th:value="${map.get('type_id')}" th:text="${map.get('type_id')}"></td>
+            <td id="td_dictionary_name" th:value="${map.get('name')}" th:text="${map.get('name')}"></td>
+            <td id="td_dictionary_code" th:value="${map.get('CODE')}" th:text="${map.get('CODE')}"></td>
+            <td id="td_dictionary_type" th:value="${map.get('type')}" th:text="${map.get('type')}"></td>
+            <td>
+                <a th:if="${dictionaryedit}" class="btn btn-danger btn-sm dropdown-toggle" th:value="${map.get('id')}" style="height: 30px" onclick="editDictionary(this)" role="button">编辑</a>
+                <a th:if="${dictionarydelete}" class="btn btn-danger btn-sm dropdown-toggle" th:value="${map.get('id')}" style="height: 30px" id="dictionary_del" onclick="deleteDictionary(this);return false" role="button">删除</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="ibox-content" id="dictionary_detail" hidden="true">
+    <form class="form-horizontal m-t" id="signupForm" th:action="@{/dictionary/addDictionary}" method="get" style="margin: 20px;">
+        <input type="hidden" id="dictionary_id" name="dictionary_id"/>
+        <div class="form-group">
+            <label for="dictionary_type">字典类型:</label>
+            <br/>
+            <select name="dictionary_type" style="width: 438px" required="required" class="btn btn-default dropdown-toggle" id="dictionary_type">
+                <option value="">请选择分类</option>
+                <div th:each="type:${dictionaryType}">
+                    <option th:value="${type.get('dictionaryType')}" th:text="${type.get('dictionaryName')}"></option>
+                </div>
+            </select>
+
+        </div>
+        <!--<div class="form-group">
+            <label for="dictionary_code">字典编码:</label>
+            <input type="text" style="text-align:left" class="form-control" id="dictionary_code" name="dictionary_code" required="true"/>
+        </div>-->
+        <div class="form-group">
+            <label for="dictionary_name">字典名称:</label>
+            <input type="text" style="text-align:left" class="form-control" id="dictionary_name" name="dictionary_name" required="true"/>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-3">
+                <button id="save_button" class="btn btn-primary" type="submit" onclick="" style="float:left;background: #f95d5d;border-color: #f95d5d;width: 82px">确认</button>
+                <span></span>
+                <button id="cancel_button" class="btn btn-primary" type="reset" style="float:left;background: #f95d5d;border-color: #f95d5d;margin-left: 50px;width: 82px">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/popper.js}"></script>
+<script th:src="@{/js/function/bootstrap.min.js}"></script>
+<script th:src="@{/js/jstree.min.js}"></script>
+<script th:src="@{/js/layer.js}"></script>
+<script th:src="@{/js/dictionary.js}"></script>
+</html>

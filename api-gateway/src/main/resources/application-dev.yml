@@ -1,0 +1,27 @@
+server:
+  port: 8093
+
+#oauth客户端配置
+security:
+  oauth2:
+    client:
+      client-id: ssoclient
+      client-secret: ssosecret
+      access-token-uri: http://localhost:8091/oauth/token
+      user-authorization-uri: http://localhost:8091/oauth/authorize
+    resource:
+      jwt:
+        key-uri: http://localhost:8091/oauth/token_key
+
+#安全配置
+securityconfig:
+  permitall: /rest/**,/re**
+  deniedpage: /deny
+
+zuul:
+  routes:
+    resource:
+      path: /resource/**
+      url: http://localhost:8095
+      stripPrefix: true
+      retryable:

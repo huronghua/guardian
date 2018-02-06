@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+<head th:include="layout :: htmlhead"></head>
+<body style="overflow: scroll;">
+<input type="hidden" name="info" id="info" class="info" th:value="${info}" />
+    <div class="con">
+        <div class="tit">
+            <div class="fl tit_l">
+                <i class="iconfont fl icon-quanxianguanli"></i>
+                <span class="fl">系统配置</span>
+            </div>
+            <div class="fr tit_r" style="position: relative;right: 170px">
+                <a th:if="${systemconfigadd}"><i class="iconfont fl icon-tianjiafenzu" id="systemAdd" title="添加系统入口配置" name="systemAdd" style="color: #f96868;"></i></a>
+                <a th:if="${systemconfigmigrate}"><i class="iconfont fl icon-tianjiafenzu" id="systemMigrate" title="系统数据迁移" name="systemMigrate" style="display:none;color: #f96868;"></i></a>
+            </div>
+        </div>
+        <!-- 联动菜单 -->
+        <div class="bot">
+            <div class="col-sm-9">
+                <div class="role_box" style="margin-left: 35px;">
+                    <table class="system_table" id="data_table" style="width: 1000px">
+                        <tr>
+                            <th width="5%" style="display: none;text-align:center">id</th>
+                            <th width="5%" style="text-align:center">序号</th>
+                            <th width="18%" style="text-align:center">系统名称</th>
+                            <th width="33%" style="text-align:center">url</th>
+                            <th width="18%" style="text-align:center">创建时间</th>
+                            <th width="18%" style="text-align:center">修改时间</th>
+                            <th colspan="2" style="text-align:center">操作</th>
+                        </tr>
+                        <tr th:each="rst : ${results}">
+                            <td th:text="${rst.id}" style="display: none"></td>
+                            <td th:text="${rst.sort}" ></td>
+                            <td th:text="${rst.name}" ></td>
+                            <td th:text="${rst.url}" ></td>
+                            <td th:text="${rst.createTime}" ></td>
+                            <td th:text="${rst.updateTime}" style="color: #676a6c;cursor: auto;"></td>
+                            <td><a th:if="${systemconfigedit}" class="change" style="color: #f96868;">编辑</a></td>
+                            <td><a th:if="${systemconfigdelete}" class="delete" style="color: #f96868;">删除</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+<form name="form1" class="form1" id="form1" method="post">
+    <input type="hidden" name="id" class="id" value="" />
+</form>
+    <script type="text/javascript" th:src="@{/js/popper.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.2.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/layer.js}"></script>
+    <script th:src="@{/js/tool.js}"></script>
+    <script th:src="@{/js/system/system-config.js}"></script>
+</body>
+</html>

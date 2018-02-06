@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>主页</title>
+    <link th:href="@{styles/home.css}" rel="stylesheet" type="text/css"/>
+    <script th:src="@{scripts/jquery.min.js}"></script>
+    <script th:src="@{scripts/tool.js}"></script>
+</head>
+<body>
+<div class="header">
+    <ul>
+        <!--<li th:text="${name}"></li>
+        <li>|</li>
+        <li> <h href="javascript:void(0)" id="signout">登出</h></li>-->
+    </ul>
+</div>
+<h4>欢迎来到斑马plato，一起重新定义旅游</h4>
+<h5>BM Trip redefine travel</h5>
+<ul class="dis_box" id="dis_box">
+    <li th:each="config,iterStat:${configList}"
+        th:onclick="'javascript:redirect(\''+${config.url}+'\')'"
+        th:text="${config.name}">系统名称</li>
+</ul>
+<div class="foot_box">
+    <div class="foot">
+        斑马旅游 BM Trip
+    </div>
+</div>
+<form th:action="@{/signout}" method="post" id="signoutform">
+</form>
+</body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $(function () {
+        $("#signout").click(function () {
+            if (confirm('您确定登出吗？')) {
+                $("#signoutform").submit();
+            }
+        });
+    });
+
+    /**权限管理系统**/
+    function redirect(url) {
+        if (client.isNotBlank(url)) {
+            location.href = url;
+        }
+    }
+    /*]]>*/
+</script>
+</html>

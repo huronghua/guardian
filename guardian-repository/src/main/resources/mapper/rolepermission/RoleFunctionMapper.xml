@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.rolepermission.RoleFunctionMapper" >
+  <resultMap id="BaseResultMap" type="com.banmatrip.guardian.domain.RoleFunction" >
+    <id column="role_id" property="roleId" jdbcType="INTEGER" />
+    <id column="function_id" property="functionId" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="create_id" property="createId" jdbcType="INTEGER" />
+    <result column="update_id" property="updateId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    role_id, function_id, create_time, update_time, create_id, update_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.banmatrip.guardian.domain.RoleFunctionKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from sso_role_function
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and function_id = #{functionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.banmatrip.guardian.domain.RoleFunctionKey" >
+    delete from sso_role_function
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and function_id = #{functionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.banmatrip.guardian.domain.RoleFunction" >
+    insert into sso_role_function (role_id, function_id, create_time, 
+      update_time, create_id, update_id
+      )
+    values (#{roleId,jdbcType=INTEGER}, #{functionId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{createId,jdbcType=INTEGER}, #{updateId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.banmatrip.guardian.domain.RoleFunction" >
+    insert into sso_role_function
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="functionId != null" >
+        function_id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="createId != null" >
+        create_id,
+      </if>
+      <if test="updateId != null" >
+        update_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="functionId != null" >
+        #{functionId,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="updateId != null" >
+        #{updateId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.banmatrip.guardian.domain.RoleFunction" >
+    update sso_role_function
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createId != null" >
+        create_id = #{createId,jdbcType=INTEGER},
+      </if>
+      <if test="updateId != null" >
+        update_id = #{updateId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and function_id = #{functionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.banmatrip.guardian.domain.RoleFunction" >
+    update sso_role_function
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      create_id = #{createId,jdbcType=INTEGER},
+      update_id = #{updateId,jdbcType=INTEGER}
+    where role_id = #{roleId,jdbcType=INTEGER}
+      and function_id = #{functionId,jdbcType=INTEGER}
+  </update>
+  <!--根据角色id获取所有该角色下的功能权限-->
+  <select id="getParentFunctionList" resultType="java.util.LinkedHashMap" parameterType="java.util.Map">
+    SELECT
+        a.id AS functionId,
+        a.`name` AS functionName,
+        b.role_id AS roleId
+    FROM
+        sso_function a
+    LEFT JOIN (
+        SELECT
+            role_id,
+            function_id
+        FROM
+            sso_role_function
+        WHERE
+            role_id = #{roleId}
+    ) b
+    ON a.id = b.function_id
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 5) c ON c.`code` = a.type
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 6) d ON d.`code` = a.sub_type
+WHERE
+        a.type = #{parentType}
+  </select>
+
+  <!--获取所有父级功能权限名称和类型-->
+  <select id="getParentFunctionType" resultType="java.util.LinkedHashMap" >
+    SELECT
+    a.type,
+    b.`name`
+    FROM
+    sso_function a
+    LEFT JOIN (SELECT * FROM sso_dictionary WHERE type = 5) b ON a.type = b.`code`
+    GROUP BY
+    a.type
+  </select>
+
+  <!--获取所有子集功能权限名称和类型-->
+  <select id="getChildFunctionType" resultType="java.util.LinkedHashMap" parameterType="java.lang.Integer" >
+    SELECT
+    a.sub_type,
+    b.`name`
+    FROM
+    sso_function a
+    LEFT JOIN (
+    SELECT
+    *
+    FROM
+    sso_dictionary
+    WHERE
+    type = 6
+    ) b ON b.`code` = a.sub_type
+    WHERE
+    a.type = #{parentType}
+    AND
+    a.sub_type!=0
+    GROUP BY
+    a.sub_type
+  </select>
+
+  <!--获取所有子集功能权限详细信息（如果有的话）-->
+  <select id="getChildFunctionList" resultType="java.util.LinkedHashMap" parameterType="java.util.Map" >
+    SELECT
+    a.id AS functionId,
+	a.`name` As functionName,
+	b.role_id AS roleId
+    FROM
+    sso_function a
+    LEFT JOIN(
+    SELECT
+    role_id,
+    function_id
+    FROM
+    sso_role_function
+    WHERE
+    role_id = #{roleId}
+    )b ON a.id = b.function_id
+    LEFT JOIN(SELECT
+    *
+    FROM
+    sso_dictionary
+    WHERE
+    type = 6
+    ) c ON c.`code` = a.sub_type
+    WHERE
+    a.sub_type = #{childType}
+  </select>
+  <!--删除指定角色下的所有功能权限-->
+  <delete id="deleteAllRoleFunctionByRoleId" parameterType="java.lang.Integer" >
+    delete from sso_role_function
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <!--根据所给功能权限列表赋予指定角色新的功能权限-->
+  <insert id="updateRoleFunctionByRoleId" parameterType="java.util.Map">
+    insert into sso_role_function (role_id, function_id)
+    values
+    <foreach collection="functionList" item="item" index="index" separator="," >
+      (#{roleId},#{item})
+    </foreach>
+  </insert>
+</mapper>

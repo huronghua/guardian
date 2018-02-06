@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.common.ProductOrderTagMapper" >
+  <resultMap id="BaseResultMap" type="com.banmatrip.guardian.domain.ProductOrderTag" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="type" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="record_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="delete_flag" jdbcType="TINYINT" javaType="java.lang.Byte" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, type, record_time, delete_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from product_order_tag
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllProductOrderTag" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from product_order_tag
+    where delete_flag = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from product_order_tag
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.banmatrip.guardian.domain.ProductOrderTag" >
+    insert into product_order_tag (id, name, type, 
+      record_time, delete_flag)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, 
+      #{record_time,jdbcType=TIMESTAMP}, #{delete_flag,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.banmatrip.guardian.domain.ProductOrderTag" >
+    insert into product_order_tag
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="record_time != null" >
+        record_time,
+      </if>
+      <if test="delete_flag != null" >
+        delete_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="record_time != null" >
+        #{record_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delete_flag != null" >
+        #{delete_flag,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.banmatrip.guardian.domain.ProductOrderTag" >
+    update product_order_tag
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="record_time != null" >
+        record_time = #{record_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="delete_flag != null" >
+        delete_flag = #{delete_flag,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.banmatrip.guardian.domain.ProductOrderTag" >
+    update product_order_tag
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=TINYINT},
+      record_time = #{record_time,jdbcType=TIMESTAMP},
+      delete_flag = #{delete_flag,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--获取订单类型列表-->
+  <select id="getProductOrderTagList" resultType="java.util.HashMap">
+    select * from product_order_tag where delete_flag=0 and type=#{type}
+  </select>
+  <select id="selectByProductTypeString" parameterType="java.util.List" resultType="java.lang.Integer">
+    SELECT `id`
+    FROM product_order_tag
+    WHERE `delete_flag` = 0 AND
+    `name` IN
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+</mapper>

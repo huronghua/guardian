@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org">
+
+<head th:include="layout :: htmlhead"></head>
+<style>
+    li.sec {
+        width: auto;
+    }
+</style>
+<body style="overflow: scroll;">
+<input type="hidden" name="success" id="success" th:value="${success}"/>
+<div class="con">
+    <div class="tit">
+        <div class="fl tit_l">
+            <i class="iconfont fl icon-quanxianguanli"></i>
+            <span class="fl">权限管理</span>
+        </div>
+        <div class="fr tit_r">
+<!--
+            <a th:if="${accountrolegroupadd}"><i class="iconfont fl icon-tianjiafenzu" id="roleGroup" title="添加角色组" name="roleGroup" style="color: #f96868;"></i></a>
+-->
+            <a th:if="${accountroleadd}"><i class="iconfont fl icon-tianjiayonghu" id="role" title="添加角色" name="role" style="color: #f96868;"></i></a>
+            <a th:if="${accountrolememberexport}" href="/role/downloadRoleMemberInfo"><i class="iconfont icon-daoru3 fl" id="download_role_info" title="导出角色成员信息"></i></a>
+            <!--<input type="text" class="search_txt fl" id="roleMemberSearchText"/>
+            <a><i class="iconfont fl icon-sousuo" id="searchRoleMember" title="搜索角色成员"></i></a>-->
+        </div>
+    </div>
+    <!-- 联动菜单 -->
+    <div class="bot">
+        <div id="box" class="menu_box fl" style="overflow: hidden;">
+            <div class="first">
+                <h2 class="menu"><i class="iconfont sanjiao"></i>斑马旅游</h2>
+            </div>
+            <ul class="second">
+                <li th:each="parent : ${tree}">
+                <li class="sec">
+                    <i class="iconfont sanjiao" th:value="${parent.get('group_id')}"></i>
+                    <!--<input type="text" th:value="${parent.get('name')}"  style="display: none; width: 60px;" />-->
+                    <span th:text="${parent.get('name')}" th:id="${parent.get('group_id')}"></span>
+                </li>
+                <ul class="third" id="third">
+                    <li th:each="child : ${parent.get('children')}">
+                        <i class="iconfont icon-yonghu" id="tree_role" th:value="${child.get('role_id')}"></i>
+                        <span th:text="${child.get('name')}"></span>
+                    </li>
+                </ul>
+                </li>
+            </ul>
+            <div id="memberWithoutRole" style="text-align: center"><a style="text-decoration: underline;font-size: 14px;color: black">未分配角色成员(<span style="color: red" id="countWithoutRole" th:text="${countWithoutRole}"></span>)</a></div>
+            <!-- 联动改变的内容 -->
+        </div>
+        <div class="dis_con fl">
+            <div class="dis_con_tit">
+                <div class="dis_con_tit_l fl" id="role_title" th:text="${title}"></div>
+                <div class="dis_con_tit_r fr">
+                    <a th:if="${accountroleedit}"><i class="iconfont icon-shezhi fl" title="修改角色" id="updateRole" name="updateRole" style="color: #f96868;"></i></a>
+                    <a th:if="${accountrolememberadd}" id="add_member" title="添加角色成员"><i class="iconfont icon-shapecopy5 fl" style="color: #f96868;"></i></a>
+                </div>
+            </div>
+            <form id="roleInfo" th:action="@{/role/saveRoleData}" METHOD="post">
+                <input type="hidden" name="roleId" id="roleId1"/>
+            <div class="tab_con">
+                <div class="tab_con_tit" id="tab_con_tit">
+                    <ul>
+                        <li>
+                            <span id="role_member">角色成员</span>
+                        </li>
+                        <li>
+                            <span id="fun_qx">功能权限</span>
+                        </li>
+                        <li>
+                            <span id="data_range">数据范围</span>
+                        </li>
+                    </ul>
+                    <input type="hidden" id="tab_index" name="tab_index" th:value="${tab_index}"/>
+                </div>
+                <div class="role_box">
+                    <table class="role_table" id="data_table">
+
+                    </table>
+                    <div class="fun">
+                        <ul id="function_data">
+                        </ul>
+                        <input type="hidden" name="roleFunction" id="roleFunction"/>
+                        <input type="hidden" id="old_roleFunction"/>
+                    </div>
+                    <div class="data_range">
+                        <ul class="des_con">
+                            <li class="des_tit fl">
+                                目的地：
+                            </li>
+                            <li class="des_r fl">
+                                <ul>
+                                    <li>
+                                        <input name="destinationType" id="radio1" value="1"  type="radio"/>
+                                        本人相关
+                                    </li>
+                                    <li>
+                                        <input name="destinationType" id="radio2" value="2"  type="radio"/>
+                                        本部门
+                                    </li>
+                                    <li>
+                                        <input name="destinationType" id="radio3" value="3"  type="radio"/>
+                                        本部门及下属部门
+                                    </li>
+                                    <li>
+                                        <input name="destinationType" id="radio4" value="0"  type="radio"/>
+                                        全部
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="des_con">
+                            <li class="des_tit fl">
+                                渠道：
+                            </li>
+                            <li class="des_r fl">
+                                <ul>
+                                    <li>
+                                        <input name="platformType" id="radio5" value="1"  type="radio"/>
+                                        本人相关
+                                    </li>
+                                    <li>
+                                        <input name="platformType" id="radio6" value="2"  type="radio"/>
+                                        本部门
+                                    </li>
+                                    <li>
+                                        <input name="platformType" id="radio7" value="3"  type="radio"/>
+                                        本部门及下属部门
+                                    </li>
+                                    <li>
+                                        <input name="platformType" id="radio8" value="0"  type="radio"/>
+                                        全部
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="des_con">
+                            <li class="des_tit fl">
+                                产品类型：
+                            </li>
+                            <li class="des_r fl">
+                                <ul>
+                                    <li>
+                                        <input name="productType" id="radio9" value="1"  type="radio"/>
+                                        本人相关
+                                    </li>
+                                    <li>
+                                        <input name="productType" id="radio10" value="2"  type="radio"/>
+                                        本部门
+                                    </li>
+                                    <li>
+                                        <input name="productType" id="radio11" value="3"  type="radio"/>
+                                        本部门及下属部门
+                                    </li>
+                                    <li>
+                                        <input name="productType" id="radio12" value="0"  type="radio"/>
+                                        全部
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <ul class="des_con">
+                            <li class="des_tit fl">
+                                资源类型：
+                            </li>
+                            <li class="des_r fl">
+                                <ul>
+                                    <li>
+                                        <input name="resourceType" id="radio13" value="1"  type="radio"/>
+                                        本人相关
+                                    </li>
+                                    <li>
+                                        <input name="resourceType" id="radio14" value="2"  type="radio"/>
+                                        本部门
+                                    </li>
+                                    <li>
+                                        <input name="resourceType" id="radio15" value="3"  type="radio"/>
+                                        本部门及下属部门
+                                    </li>
+                                    <li>
+                                        <input name="resourceType" id="radio16" value="0"  type="radio"/>
+                                        全部
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="confir_reset">
+                        <span th:if="${accountpermissionset}" class="confir" id="confir">保存</span>
+                        <!--<span class="cancle" id="cancle">取消</span>-->
+                        <input class="reset" type="reset" value="重置" />
+                    </div>
+                </div>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--未配置成员信息页面-->
+<table class="role_table" id="unconfigured_member" hidden="true" style="display: block;">
+
+</table>
+<!--添加角色组页面-->
+<!--<div class="ibox-content" id="add_role_group" hidden="true">
+    <form class="form-horizontal m-t" id="addRoleGroup" th:action="@{/role_group/save}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">角色组名称：</label>
+            <div class="col-sm-8">
+                <input id="roleGroupName" name="roleGroupName" class="form-control" type="text" aria-required="true" aria-invalid="true" required="required"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-3">
+                <button id="role_group_save_button" class="btn btn-primary" type="submit" style="float:left;background: #f95d5d;border-color: #f95d5d;">保存</button>
+                <span></span>
+                <button id="role_group_cancel_button" class="btn btn-primary" type="button" style="float:left;margin-left: 60px;background: #f95d5d;border-color: #f95d5d;">取消</button>
+            </div>
+        </div>
+    </form>
+</div>-->
+
+<!--添加角色页面-->
+<div class="ibox-content" id="add_role" hidden="true">
+    <form class="form-horizontal m-t" id="addRole" th:action="@{/role/save}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">角色名称：</label>
+            <div class="col-sm-8">
+                <input id="roleName" name="roleName" class="form-control" type="text" aria-required="true" aria-invalid="true"/>
+                <input type="hidden" name="roleId" id="roleId2"/>
+            </div>
+            <label class="col-sm-3 control-label">角色组名称：</label>
+            <div class="col-sm-8">
+                <select id="groupId" name="groupId" class="form-control m-b">
+                </select>
+                <input type="hidden" name="roleGroupId" id="roleGroupId" th:value="${groupId}"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-3">
+                <button id="role_save_button" class="btn btn-primary" type="submit" style="float:left;background: #f95d5d;border-color: #f95d5d;">保存</button>
+                <span></span>
+                <button id="role_cancel_button" class="btn btn-primary" type="button" style="float:left;margin-left: 60px;background: #f95d5d;border-color: #f95d5d;">取消</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!--添加角色成员页面-->
+<div class="ibox-content" id="edit_html" hidden="true">
+    <form class="form-horizontal m-t" id="signupForm" th:action="@{/role/addRoleMember}">
+        <div class="form-group">
+                <div class="col-sm-8">
+                    <input id="search_data" autocomplete="off" style="position: absolute;left: 64px;z-index: 200;width: 365px;top: -24px;" type="text" class="form-control" required="true" placeholder="输入成员姓名以进行搜索"/>
+                </div>
+                <ul class="search_result" style="width: 321px;height: 150px;overflow:scroll;display:none;position:absolute;top:40px;left:69px;background-color:#FFF;z-index:100;border: 1px solid red;" id="search_result"></ul>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">姓名：</label>
+            <div class="col-sm-8">
+                <input disabled="true" id="memberName" class="form-control" type="text" aria-required="true" aria-invalid="true"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">职位：</label>
+            <div class="col-sm-8">
+                <input disabled="true" id="position" class="form-control" aria-required="true" aria-invalid="true" type="text"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">邮箱：</label>
+            <div class="col-sm-8">
+                <input disabled="true" id="email" class="form-control" type="email" aria-required="true" aria-invalid="true"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">工号：</label>
+            <div class="col-sm-8">
+                <input disabled="true" id="employeeId" class="form-control" type="text" aria-required="true" aria-invalid="true"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">手机：</label>
+            <div class="col-sm-8">
+                <input disabled="true" id="cellphone" class="form-control" type="text" aria-required="true" aria-invalid="true"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8 col-sm-offset-3">
+                <button id="save_button" class="btn btn-primary" type="submit" onclick="return check_is_present()" style="float:left;background: #f95d5d;border-color: #f95d5d;">保存</button>
+                <span></span>
+                <button id="cancel_button" class="btn btn-primary" type="button" style="float:left;margin-left: 60px;background: #f95d5d;border-color: #f95d5d;">取消</button>
+            </div>
+        </div>
+        <div>
+            <input type="hidden" name="roleId" id="roleId" th:value="${roleId}"/>
+            <input type="hidden" name="id" id="id"/>
+            <input type="hidden" name="roleDelete" th:value="${accountrolememberdelete}" />
+        </div>
+    </form>
+</div>
+<script th:src="@{/js/jquery-3.2.1.min.js}"></script>
+<script th:src="@{/js/popper.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js-v=3.3.5.js}"></script>
+<script th:src="@{/js/jstree.min.js}"></script>
+<script th:src="@{/js/layer.js}"></script>
+<script th:src="@{/js/tree.js}"></script>
+<script th:src="@{/js/role-member.js}"></script>
+</body>
+</html>

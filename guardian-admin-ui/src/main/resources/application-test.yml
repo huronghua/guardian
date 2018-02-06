@@ -1,0 +1,59 @@
+server:
+  port: 8081
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  datasource:
+      url: jdbc:mysql://172.16.1.18:3306/banma_dev?useUnicode=true&characterEncoding=utf8&tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&useSSL=true
+      username: dev
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+  application:
+    name: guardian
+
+#mybatis配置
+mybatis:
+  typeAliasesPackage: com.banmatrip.guardian.domain
+  mapperLocations: classpath*:mapper/*/*.xml
+  configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  configuration.call-setters-on-nulls: true
+
+#oauth客户端配置
+security:
+  ignored: /favicon.ico,/scripts/**,/styles/**,/images/**
+  sessions: always
+  oauth2:
+    sso:
+      login-path: /login
+    client:
+      client-id: ssoclient
+      client-secret: ssosecret
+      access-token-uri: http://172.16.1.14:8091/oauth/token
+      user-authorization-uri: http://172.16.1.14:8091/oauth/authorize
+      client-authentication-scheme: form
+    resource:
+      jwt:
+        key-uri: http://172.16.1.14:8091/oauth/token_key
+
+#安全配置
+securityconfig:
+  logoutsuccssurl: /tosignout
+  permitall: /rest/**
+  deniedpage: /deny
+
+
+#登出配置
+sso:
+  tosignout:
+    url: http://172.16.1.14:8091/signout
+
+  
+zuul:
+  routes:
+    resource:
+      path: /resource/**
+      url: http://172.16.1.14:8092
+      stripPrefix: true
+      retryable:
+

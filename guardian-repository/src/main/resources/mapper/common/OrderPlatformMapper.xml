@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.banmatrip.guardian.repository.mapper.common.OrderPlatformMapper" >
+  <resultMap id="BaseResultMap" type="com.banmatrip.guardian.domain.OrderPlatform" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="delete_flag" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="record_time" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="show_flag" jdbcType="TINYINT" javaType="java.lang.Byte" />
+      <arg column="parent_platform_id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="level" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="remark" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, delete_flag, record_time, show_flag, parent_platform_id, level, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from order_platform
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAllOrderPlatform" resultMap="BaseResultMap" >
+    select
+    <include refid="Base_Column_List" />
+    from order_platform
+    where delete_flag = 0
+  </select>
+  <select id="selectAllOrderPlatformByParentId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select
+    <include refid="Base_Column_List" />
+    from order_platform
+    where parent_platform_id = #{parentId} AND delete_flag = 0
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from order_platform
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.banmatrip.guardian.domain.OrderPlatform" >
+    insert into order_platform (id, name, delete_flag, 
+      record_time, show_flag, parent_platform_id, 
+      level, remark)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{delete_flag,jdbcType=TINYINT}, 
+      #{record_time,jdbcType=TIMESTAMP}, #{show_flag,jdbcType=TINYINT}, #{parent_platform_id,jdbcType=INTEGER}, 
+      #{level,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.banmatrip.guardian.domain.OrderPlatform" >
+    insert into order_platform
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="delete_flag != null" >
+        delete_flag,
+      </if>
+      <if test="record_time != null" >
+        record_time,
+      </if>
+      <if test="show_flag != null" >
+        show_flag,
+      </if>
+      <if test="parent_platform_id != null" >
+        parent_platform_id,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="delete_flag != null" >
+        #{delete_flag,jdbcType=TINYINT},
+      </if>
+      <if test="record_time != null" >
+        #{record_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="show_flag != null" >
+        #{show_flag,jdbcType=TINYINT},
+      </if>
+      <if test="parent_platform_id != null" >
+        #{parent_platform_id,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.banmatrip.guardian.domain.OrderPlatform" >
+    update order_platform
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="delete_flag != null" >
+        delete_flag = #{delete_flag,jdbcType=TINYINT},
+      </if>
+      <if test="record_time != null" >
+        record_time = #{record_time,jdbcType=TIMESTAMP},
+      </if>
+      <if test="show_flag != null" >
+        show_flag = #{show_flag,jdbcType=TINYINT},
+      </if>
+      <if test="parent_platform_id != null" >
+        parent_platform_id = #{parent_platform_id,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.banmatrip.guardian.domain.OrderPlatform" >
+    update order_platform
+    set name = #{name,jdbcType=VARCHAR},
+      delete_flag = #{delete_flag,jdbcType=TINYINT},
+      record_time = #{record_time,jdbcType=TIMESTAMP},
+      show_flag = #{show_flag,jdbcType=TINYINT},
+      parent_platform_id = #{parent_platform_id,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getOrderPlatform" resultType="java.util.HashMap">
+    SELECT
+        *
+    FROM
+        order_platform
+    WHERE
+        delete_flag = 0
+    <if test="orderPlatformIdList.size()>0">
+      <choose>
+        <when test="orderPlatformIdList.size()==1">
+          <foreach collection="orderPlatformIdList" index="index" item="item">
+            AND id = #{item}
+          </foreach>
+        </when>
+        <otherwise>
+            AND id IN
+          <foreach collection="orderPlatformIdList" index="index" item="item" open="(" close=")" separator=",">
+            #{item}
+          </foreach>
+        </otherwise>
+      </choose>
+    </if>
+  </select>
+  <select id="selectByPlatformString" parameterType="java.util.List" resultType="java.lang.Integer">
+    SELECT `id`
+    FROM order_platform
+    WHERE `delete_flag` = 0 AND
+    `name` IN
+    <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+      #{item}
+    </foreach>
+  </select>
+</mapper>
